@@ -1,13 +1,17 @@
-import { Injectable, signal, computed, effect } from '@angular/core';
+import { Injectable, signal, computed, effect, inject } from '@angular/core';
 import { BudgetTransaction } from '../models/transaction.model';
+import { StorageService } from './storage.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class BudgetService {
+    private storageService = inject(StorageService);
+    private notificationService = inject(NotificationService);
     private storageKey = 'budget_transactions';
 
-    // Signals for reactive state management
+    // Signals
     transactions = signal<BudgetTransaction[]>([]);
 
     // Computed values
@@ -25,33 +29,40 @@ export class BudgetService {
     constructor() {
         this.loadFromStorage();
 
-        // Auto-save whenever transactions change
+        // Auto-save effect
         effect(() => {
-            localStorage.setItem(this.storageKey, JSON.stringify(this.transactions()));
+            this.storageService.setItem(this.storageKey, this.transactions());
         });
     }
 
     private loadFromStorage() {
-        const data = localStorage.getItem(this.storageKey);
+        const data = this.storageService.getItem<BudgetTransaction[]>(this.storageKey);
         if (data) {
-            try {
-                this.transactions.set(JSON.parse(data));
-            } catch (e) {
-                console.error('Failed to parse transactions', e);
-                this.transactions.set([]);
-            }
+            this.transactions.set(data);
         }
     }
 
     addTransaction(transaction: Omit<BudgetTransaction, 'id'>) {
-        const newTransaction: BudgetTransaction = {
-            ...transaction,
-            id: crypto.randomUUID()
-        };
-        this.transactions.update(items => [newTransaction, ...items]);
+        try {
+            const newTransaction: BudgetTransaction = {
+                ...transaction,
+                id: crypto.randomUUID()
+            };
+            this.transactions.update(items => [newTransaction, ...items]);
+            this.notificationService.success('İşlem başarıyla eklendi');
+        } catch (error) {
+            this.notificationService.error('İşlem eklenirken hata oluştu');
+            console.error(error);
+        }
     }
 
     deleteTransaction(id: string) {
-        this.transactions.update(items => items.filter(t => t.id !== id));
+        try {
+            this.transactions.update(items => items.filter(t => t.id !== id));
+            this.notificationService.show('İşlem silindi', 'info');
+        } catch (error) {
+            this.notificationService.error('İşlem silinirken hata oluştu');
+            console.error(error);
+        }
     }
 }

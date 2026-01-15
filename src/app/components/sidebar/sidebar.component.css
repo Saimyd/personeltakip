@@ -1,0 +1,66 @@
+.sidebar {
+    width: 280px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+    background-color: var(--card-bg);
+}
+
+.sidebar.collapsed {
+    width: 80px;
+}
+
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .toggle-btn {
+    display: none;
+}
+
+.nav-link {
+    color: var(--text-secondary);
+    border-radius: 12px;
+    padding: 12px 16px;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: rgba(67, 97, 238, 0.1);
+    color: var(--primary-color);
+}
+
+.nav-link i {
+    min-width: 24px;
+}
+
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+}
+
+.logo-area {
+    height: 40px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.toggle-btn {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--background-color);
+}
+
+.theme-toggle-area {
+    background-color: var(--background-color);
+    border-radius: 12px;
+    padding: 4px;
+}
