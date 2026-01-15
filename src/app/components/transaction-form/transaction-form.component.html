@@ -1,6 +1,14 @@
-<div class="card shadow-lg border-0 mb-4 h-100">
+<div class="card shadow-sm border-0 mb-4 h-100">
     <div class="card-body p-4">
-        <h4 class="card-title mb-4 fw-bold text-primary">İşlem Ekle</h4>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="card-title fw-bold text-primary mb-0">
+                {{ editState.editingTransaction() ? 'İşlemi Düzenle' : 'İşlem Ekle' }}
+            </h5>
+            <button *ngIf="editState.editingTransaction()" class="btn btn-sm btn-outline-secondary"
+                (click)="cancelEdit()">
+                İptal
+            </button>
+        </div>
 
         <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
             <div class="form-floating mb-3">
@@ -12,7 +20,7 @@
                 </div>
             </div>
 
-            <div class="form-floating mb-4">
+            <div class="form-floating mb-3">
                 <input type="number" id="amount" class="form-control" formControlName="amount"
                     [class.is-invalid]="isFieldInvalid('amount')" placeholder="Tutar">
                 <label for="amount">Tutar</label>
@@ -20,6 +28,8 @@
                     Geçerli bir tutar giriniz.
                 </div>
             </div>
+
+            <input type="hidden" formControlName="date">
 
             <div class="mb-4">
                 <label class="form-label text-muted small text-uppercase fw-bold mb-2">İşlem Türü</label>
@@ -36,7 +46,7 @@
 
             <button type="submit" class="btn btn-primary w-100 py-3 fw-bold shadow-sm"
                 [disabled]="transactionForm.invalid">
-                + İŞLEM EKLE
+                {{ editState.editingTransaction() ? 'GÜNCELLE' : '+ İŞLEM EKLE' }}
             </button>
         </form>
     </div>

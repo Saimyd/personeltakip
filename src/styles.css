@@ -5,36 +5,60 @@
     --accent-color: #4895ef;
     --success-color: #4cc9f0;
     --danger-color: #f72585;
-    --background-color: #f8f9fa;
-    --card-bg: #ffffff;
-    --text-primary: #2b2d42;
-    --text-secondary: #8d99ae;
-    --border-color: #e9ecef;
+    --background-color: #eff6ff;
+    /* Very subtle blue tint */
+    --card-bg: rgba(255, 255, 255, 0.85);
+    /* Proper glassmorphism base */
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: rgba(226, 232, 240, 0.8);
+    --sidebar-bg: rgba(255, 255, 255, 0.9);
     --font-family: 'Inter', sans-serif;
+    --input-bg: rgba(255, 255, 255, 0.5);
+    --card-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    /* Soft glass shadow */
 }
 
 [data-theme="dark"] {
-    --primary-color: #4895ef;
-    --secondary-color: #4361ee;
-    --accent-color: #4cc9f0;
-    --success-color: #4cc9f0;
-    --danger-color: #f72585;
-    --background-color: #1a1b1e;
-    --card-bg: #25262b;
-    --text-primary: #e9ecef;
-    --text-secondary: #adb5bd;
-    --border-color: #2c2e33;
+    --primary-color: #60a5fa;
+    --secondary-color: #3b82f6;
+    --accent-color: #38bdf8;
+    --success-color: #2dd4bf;
+    --danger-color: #fb7185;
+    --background-color: #0f172a;
+    /* Deep slate */
+    --card-bg: rgba(30, 41, 59, 0.7);
+    /* Dark glass */
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border-color: rgba(51, 65, 85, 0.5);
+    --sidebar-bg: rgba(15, 23, 42, 0.8);
+    --input-bg: rgba(30, 41, 59, 0.5);
+    --card-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 }
 
+/* Base Body with Mesh Gradient */
 body {
     font-family: var(--font-family);
-    background-color: var(--background-color);
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     transition: background-color 0.3s ease, color 0.3s ease;
     overflow: hidden;
-    /* Prevent full body scroll, use main-content scroll */
+    background-color: var(--background-color);
+    background-image:
+        radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
 }
+
+/* Override mesh for light mode */
+body:not([data-theme="dark"]) {
+    background-image:
+        radial-gradient(at 0% 0%, hsla(253, 16%, 93%, 1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(225, 39%, 93%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(339, 49%, 96%, 1) 0, transparent 50%);
+}
+
 
 h1,
 h2,
@@ -50,119 +74,183 @@ h6 {
     height: 100vh;
 }
 
-/* Compact Card Styles */
+/* Premium Glass Cards */
 .card {
-    border: none;
-    border-radius: 12px;
-    background-color: var(--card-bg);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 16px;
+    /* Increases roudness for premium feel */
+    background-color: var(--card-bg) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--text-primary);
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .card:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px) scale(1.005);
+    border-color: var(--primary-color) !important;
 }
 
-/* Utilities */
-.text-gradient {
-    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+/* Force dark mode updates on bootstrap */
+[data-theme="dark"] .bg-white,
+[data-theme="dark"] .bg-light,
+[data-theme="dark"] .bg-body-tertiary {
+    background-color: transparent !important;
+    color: var(--text-primary) !important;
 }
 
-.form-control {
-    border-radius: 8px;
-    padding: 10px 12px;
-    /* Smaller padding */
-    font-size: 0.9rem;
-    /* Smaller font */
-    border: 1px solid var(--border-color);
-    background-color: var(--background-color);
+[data-theme="dark"] .text-dark {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .list-group-item {
+    background-color: var(--card-bg);
     color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+/* Dashboard Cards Compact */
+.stat-card-title {
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.stat-card-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* Form & Inputs */
+.form-control {
+    border-radius: 12px;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+    backdrop-filter: blur(4px);
 }
 
 .form-control:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
-    background-color: var(--card-bg);
+    background-color: var(--input-bg);
     color: var(--text-primary);
 }
 
-.btn {
-    border-radius: 8px;
-    padding: 8px 16px;
-    /* Compact buttons */
-    font-size: 0.9rem;
+/* Sidebar Specific */
+.sidebar {
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.sidebar.collapsed {
+    width: 70px;
+}
+
+.sidebar.collapsed .logo-text,
+.sidebar.collapsed .toggle-btn,
+.sidebar.collapsed .nav-link span,
+.sidebar.collapsed .btn span {
+    display: none;
+}
+
+.sidebar.collapsed .nav-link {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.nav-link {
+    color: var(--text-secondary);
+    border-radius: 12px;
+    padding: 12px 16px;
+    transition: all 0.2s;
     font-weight: 500;
-    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
 }
 
-/* Animations */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.nav-link:hover,
+.nav-link.active {
+    background-color: rgba(67, 97, 238, 0.1);
+    color: var(--primary-color);
 }
 
-.fade-in-up {
-    animation: fadeInUp 0.4s ease-out forwards;
-    /* Faster animation */
-    opacity: 0;
+.nav-link i {
+    font-size: 1.1rem;
 }
 
-.delay-100 {
-    animation-delay: 0.05s;
+.icon-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
 }
 
-/* Faster stagger */
+.logo-area {
+    height: 40px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.toggle-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.theme-toggle-area {
+    background-color: var(--input-bg);
+    border-radius: 12px;
+    padding: 6px;
+}
 
 /* Layout Utilities */
 .main-content {
-    margin-left: 280px;
+    margin-left: 260px;
     transition: margin-left 0.3s ease;
     height: 100vh;
+    background: transparent;
 }
 
 @media (max-width: 992px) {
     .sidebar {
-        width: 80px;
-    }
-
-    .sidebar .logo-text,
-    .sidebar .toggle-btn,
-    .sidebar .nav-link span {
-        display: none;
-    }
-
-    .sidebar .nav-link {
-        justify-content: center;
+        width: 70px;
     }
 
     .main-content {
-        margin-left: 80px;
+        margin-left: 70px;
     }
 }
 
-/* Custom Scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
     width: 6px;
-    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--text-secondary);
+    border-radius: 4px;
+    opacity: 0.5;
 }
 
 ::-webkit-scrollbar-track {
     background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
 }
 
 [data-theme="dark"] ::-webkit-scrollbar-thumb {
@@ -171,4 +259,52 @@ h6 {
 
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 0, 0, 0.2);
+}
+
+/* SVG Chart */
+.circular-chart {
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    max-height: 220px;
+}
+
+.circle-bg {
+    fill: none;
+    stroke: var(--border-color);
+    stroke-width: 3.8;
+}
+
+.circle-income {
+    fill: none;
+    stroke: var(--success-color);
+    stroke-width: 2.8;
+    stroke-linecap: round;
+    transition: stroke-dasharray 1s ease-out;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+
+.delay-100 {
+    animation-delay: 0.1s;
 }

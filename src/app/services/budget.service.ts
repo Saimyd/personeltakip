@@ -56,6 +56,17 @@ export class BudgetService {
         }
     }
 
+    updateTransaction(id: string, updatedData: Partial<BudgetTransaction>) {
+        try {
+            this.transactions.update(items => items.map(t =>
+                t.id === id ? { ...t, ...updatedData } : t
+            ));
+            this.notificationService.success('İşlem güncellendi');
+        } catch (error) {
+            this.notificationService.error('Güncelleme sırasında hata oluştu');
+        }
+    }
+
     deleteTransaction(id: string) {
         try {
             this.transactions.update(items => items.filter(t => t.id !== id));

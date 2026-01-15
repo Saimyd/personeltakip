@@ -6,12 +6,13 @@ import { TransactionFormComponent } from './components/transaction-form/transact
 import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { LayoutService } from './services/layout.service';
+import { BudgetService } from './services/budget.service';
 
 @Component({
     selector: 'app-root',
     standalone: true,
     imports: [
-        CommonModule, // Added for ngIf/ngSwitch
+        CommonModule,
         SidebarComponent,
         DashboardComponent,
         TransactionFormComponent,
@@ -23,4 +24,16 @@ import { LayoutService } from './services/layout.service';
 })
 export class AppComponent {
     layoutService = inject(LayoutService);
+    budgetService = inject(BudgetService);
+
+    getIncomeDashArray(): string {
+        const income = this.budgetService.totalIncome();
+        const expense = this.budgetService.totalExpense();
+        const total = income + expense;
+
+        if (total === 0) return '0, 100';
+
+        const percentage = (income / total) * 100;
+        return `${percentage}, 100`;
+    }
 }

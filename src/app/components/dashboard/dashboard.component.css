@@ -1,16 +1,22 @@
-.bg-success-gradient {
-    background: linear-gradient(135deg, #11998e, #38ef7d);
+/* Dark mode overrides for specific dashboard dashboard elements */
+[data-theme="dark"] .bg-success-subtle {
+    background-color: rgba(16, 185, 129, 0.2) !important;
+    color: #34d399 !important;
 }
 
-.bg-danger-gradient {
-    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+[data-theme="dark"] .bg-danger-subtle {
+    background-color: rgba(244, 63, 94, 0.2) !important;
+    color: #fb7185 !important;
 }
 
-.bg-primary-gradient {
-    background: linear-gradient(135deg, #4361ee, #7209b7);
+[data-theme="dark"] .bg-primary-subtle {
+    background-color: rgba(59, 130, 246, 0.2) !important;
 }
 
-.letter-spacing-2 {
-    letter-spacing: 1px;
-    font-size: 0.85rem;
+[data-theme="dark"] .text-primary-emphasis {
+    color: #60a5fa !important;
+}
+
+.opacity-10 {
+    opacity: 0.1;
 }

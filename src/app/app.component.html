@@ -3,39 +3,39 @@
 <div class="d-flex h-100vh overflow-hidden">
     <app-sidebar></app-sidebar>
 
-    <main class="main-content flex-grow-1 overflow-auto bg-body-tertiary">
+    <main class="main-content flex-grow-1 overflow-auto">
         <div class="container-fluid p-3 p-lg-4">
 
             <!-- HEADER -->
-            <div class="d-flex align-items-center justify-content-between mb-3 fade-in-up">
+            <div class="d-flex align-items-center justify-content-between mb-4 fade-in-up">
                 <div>
                     <h3 class="fw-bold mb-0 text-primary" *ngIf="layoutService.activeView() === 'dashboard'">Genel Bakış
                     </h3>
                     <h3 class="fw-bold mb-0 text-primary" *ngIf="layoutService.activeView() === 'transactions'">İşlemler
                     </h3>
-                    <h3 class="fw-bold mb-0 text-primary" *ngIf="layoutService.activeView() === 'reports'">Raporlar</h3>
+                    <h3 class="fw-bold mb-0 text-primary" *ngIf="layoutService.activeView() === 'reports'">Finansal
+                        Raporlar</h3>
                     <p class="text-muted small mb-0">Finansal durumunuzu yönetin</p>
                 </div>
-                <div class="today-date text-muted small fw-medium">
+                <div class="today-date text-muted small fw-medium text-uppercase letter-spacing-1">
                     {{ 0 | date:'fullDate' }}
                 </div>
             </div>
 
             <!-- DASHBOARD VIEW -->
             <div *ngIf="layoutService.activeView() === 'dashboard'" class="fade-in-up delay-100">
-                <app-dashboard></app-dashboard> <!-- Shows Cards + Chart -->
+                <app-dashboard></app-dashboard>
 
                 <div class="row mt-3 g-3">
                     <div class="col-12">
                         <div class="card shadow-sm border-0">
                             <div
-                                class="card-header bg-white border-0 py-2 d-flex justify-content-between align-items-center">
+                                class="card-header bg-transparent border-0 py-3 d-flex justify-content-between align-items-center">
                                 <h6 class="mb-0 fw-bold">Son İşlemler</h6>
                                 <button class="btn btn-sm btn-light text-primary small"
-                                    (click)="layoutService.setView('transactions')">Tümünü Gör</button>
+                                    (click)="layoutService.setView('transactions')">Tümünü Yönet</button>
                             </div>
                             <div class="card-body p-0">
-                                <!-- Reuse Transaction List but maybe limit in future. For now, full list is fine or truncated via CSS -->
                                 <app-transaction-list></app-transaction-list>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
 
             <!-- TRANSACTIONS VIEW -->
             <div *ngIf="layoutService.activeView() === 'transactions'" class="fade-in-up delay-100">
-                <div class="row g-3">
+                <div class="row g-4">
                     <div class="col-lg-4">
                         <app-transaction-form></app-transaction-form>
                     </div>
@@ -57,17 +57,58 @@
 
             <!-- REPORTS VIEW -->
             <div *ngIf="layoutService.activeView() === 'reports'" class="fade-in-up delay-100">
-                <div class="alert alert-info border-0 shadow-sm d-flex align-items-center gap-2">
-                    <i class="bi bi-info-circle-fill"></i>
-                    <div>
-                        <strong>Detaylı Raporlar</strong> yakında burada olacak. Şu an için Panel üzerinden özet
-                        grafikleri inceleyebilirsiniz.
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-6 col-lg-5">
+                        <div
+                            class="card h-100 border-0 p-4 text-center d-flex flex-column align-items-center position-relative overflow-hidden">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 bg-primary-subtle opacity-10"
+                                style="z-index: 0;"></div>
+                            <div style="z-index: 1; width: 100%;">
+                                <h5 class="fw-bold mb-4 text-gradient">Mali Dağılım</h5>
+
+                                <div class="position-relative mx-auto" style="width: 220px; height: 220px;">
+                                    <svg viewBox="0 0 36 36" class="circular-chart">
+                                        <path class="circle-bg"
+                                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <path class="circle-income" [attr.stroke-dasharray]="getIncomeDashArray()"
+                                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    </svg>
+                                    <div class="position-absolute top-50 start-50 translate-middle text-center">
+                                        <h6 class="text-muted small mb-0 text-uppercase"
+                                            style="font-size: 0.7rem; letter-spacing: 1px;">Toplam Hacim</h6>
+                                        <span class="fw-bold fs-4">{{ (budgetService.totalIncome() +
+                                            budgetService.totalExpense()) | currency:'TRY':'symbol-narrow':'1.0-0'
+                                            }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 w-100">
+                                    <div
+                                        class="d-flex justify-content-between align-items-center mb-2 p-3 rounded-3 bg-light-subtle border">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge rounded-circle p-1"
+                                                style="background-color: var(--success-color); width: 10px; height: 10px;"></span>
+                                            <span class="small fw-semibold">Gelirler</span>
+                                        </div>
+                                        <span class="fw-bold text-success">{{ budgetService.totalIncome() |
+                                            currency:'TRY':'symbol-narrow':'1.2-2' }}</span>
+                                    </div>
+                                    <div
+                                        class="d-flex justify-content-between align-items-center p-3 rounded-3 bg-light-subtle border">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge rounded-circle p-1"
+                                                style="background-color: var(--danger-color); width: 10px; height: 10px;"></span>
+                                            <span class="small fw-semibold">Giderler</span>
+                                        </div>
+                                        <span class="fw-bold text-danger">{{ budgetService.totalExpense() |
+                                            currency:'TRY':'symbol-narrow':'1.2-2' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- Re-showing dashboard component as a placeholder for charts -->
-                <app-dashboard></app-dashboard>
             </div>
-
         </div>
     </main>
 </div>

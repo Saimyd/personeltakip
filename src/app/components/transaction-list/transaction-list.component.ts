@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BudgetService } from '../../services/budget.service';
+import { EditStateService } from '../../services/edit-state.service';
 
 @Component({
     selector: 'app-transaction-list',
@@ -11,4 +12,5 @@ import { BudgetService } from '../../services/budget.service';
 })
 export class TransactionListComponent {
     budgetService = inject(BudgetService);
+    editState = inject(EditStateService);
 }
