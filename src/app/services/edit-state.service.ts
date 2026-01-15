@@ -14,4 +14,9 @@ export class EditStateService {
     cancelEdit() {
         this.editingTransaction.set(null);
     }
+
+    // Alias for consistency
+    clearEdit() {
+        this.cancelEdit();
+    }
 }

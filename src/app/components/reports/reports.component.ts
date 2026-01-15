@@ -59,9 +59,4 @@ export class ReportsComponent {
         if (total === 0) return '0, 100';
         return `${(income / total) * 100}, 100`;
     }
-
-    // Demo Generator
-    addDemoData() {
-        this.budgetService.generateDemoData();
-    }
 }

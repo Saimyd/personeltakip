@@ -29,6 +29,33 @@
                 </div>
             </div>
 
+            <!-- Category Select -->
+            <div class="form-floating mb-3">
+                <select class="form-select" id="category" formControlName="category"
+                    [class.is-invalid]="isFieldInvalid('category')">
+                    <option value="other">Diğer</option>
+                    <hr>
+                    <optgroup label="Giderler" *ngIf="transactionForm.get('type')?.value === 'expense'">
+                        <option value="housing">Kira / Konut</option>
+                        <option value="food">Gıda / Market</option>
+                        <option value="transport">Ulaşım / Yakıt</option>
+                        <option value="utilities">Faturalar</option>
+                        <option value="entertainment">Eğlence / Aktivite</option>
+                        <option value="health">Sağlık</option>
+                        <option value="shopping">Alışveriş / Giyim</option>
+                        <option value="education">Eğitim</option>
+                        <option value="tech">Teknoloji</option>
+                    </optgroup>
+                    <optgroup label="Gelirler" *ngIf="transactionForm.get('type')?.value === 'income'">
+                        <option value="salary">Maaş</option>
+                        <option value="freelance">Freelance / Ek İş</option>
+                        <option value="investment">Yatırım</option>
+                        <option value="gift">Hediye</option>
+                    </optgroup>
+                </select>
+                <label for="category">Kategori</label>
+            </div>
+
             <input type="hidden" formControlName="date">
 
             <div class="mb-4">

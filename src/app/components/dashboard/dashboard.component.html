@@ -78,3 +78,43 @@
         <span class="fw-bold">{{ calculatePercentage() }}%</span>
     </div>
 </div>
+
+<!-- Recent Transactions -->
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+        <h6 class="mb-0 fw-bold text-dark">Son İşlemler</h6>
+        <small class="text-muted cursor-pointer" style="font-size: 0.75rem;">Tümünü Gör</small>
+    </div>
+    <div class="card-body p-0">
+        <div class="list-group list-group-flush">
+            <div *ngFor="let t of budgetService.transactions().slice(0, 5)"
+                class="list-group-item list-group-item-action border-0 px-4 py-3 cursor-pointer d-flex align-items-center justify-content-between"
+                (click)="editState.startEdit(t)">
+
+                <!-- Left: Icon & Info -->
+                <div class="d-flex align-items-center gap-3">
+                    <div class="icon-box rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm"
+                        [ngClass]="'bg-' + getCategoryColor(t.category, t.description)"
+                        style="width: 40px; height: 40px; font-size: 1.1rem;">
+                        <i class="bi" [ngClass]="getCategoryIcon(t.category, t.description)"></i>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <span class="mb-0 fw-bold text-dark small">{{ t.description }}</span>
+                        <span class="text-muted" style="font-size: 0.7rem;">{{ t.date | date:'mediumDate' }}</span>
+                    </div>
+                </div>
+
+                <!-- Right: Amount -->
+                <span class="fw-bold small" [class.text-success]="t.type === 'income'"
+                    [class.text-danger]="t.type === 'expense'">
+                    {{ t.type === 'income' ? '+' : '-' }} {{ t.amount | currency:'TRY':'symbol-narrow':'1.0-0' }}
+                </span>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="budgetService.transactions().length === 0" class="text-center py-4">
+                <span class="text-muted small">Henüz işlem yok.</span>
+            </div>
+        </div>
+    </div>
+</div>

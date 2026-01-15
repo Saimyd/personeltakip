@@ -1,6 +1,6 @@
-import { Component, inject, effect } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BudgetService } from '../../services/budget.service';
 import { EditStateService } from '../../services/edit-state.service';
 import { BudgetTransaction } from '../../models/transaction.model';
@@ -21,65 +21,76 @@ export class TransactionFormComponent {
         description: ['', [Validators.required, Validators.minLength(3)]],
         amount: [null, [Validators.required, Validators.min(0.01)]],
         type: ['expense', Validators.required],
-        date: [new Date().toISOString().split('T')[0]]
+        category: ['other', Validators.required],
+        date: [new Date().toISOString().substring(0, 10), Validators.required]
     });
 
+    isEditMode = false;
+    editingId: string | null = null;
+
     constructor() {
-        // Monitor edit state changes
         effect(() => {
-            const t = this.editState.editingTransaction();
-            if (t) {
-                this.transactionForm.patchValue({
-                    description: t.description,
-                    amount: t.amount,
-                    type: t.type,
-                    date: t.date
-                });
-            } else {
-                // Reset form when edit is cancelled
-                this.transactionForm.reset({ type: 'expense', date: new Date().toISOString().split('T')[0] });
+            const transactionToEdit = this.editState.editingTransaction();
+            if (transactionToEdit) {
+                this.startEdit(transactionToEdit);
             }
         });
     }
 
+    startEdit(transaction: BudgetTransaction) {
+        this.isEditMode = true;
+        this.editingId = transaction.id;
+        this.transactionForm.patchValue({
+            description: transaction.description,
+            amount: transaction.amount,
+            type: transaction.type,
+            category: transaction.category || 'other',
+            date: transaction.date.substring(0, 10)
+        });
+    }
+
     cancelEdit() {
-        this.editState.cancelEdit();
+        this.isEditMode = false;
+        this.editingId = null;
+        this.transactionForm.reset({
+            type: 'expense',
+            category: 'other',
+            date: new Date().toISOString().substring(0, 10)
+        });
+        this.editState.clearEdit();
     }
 
     onSubmit() {
         if (this.transactionForm.valid) {
             const formValue = this.transactionForm.value;
-            const t = this.editState.editingTransaction();
+            const transactionData = {
+                description: formValue.description,
+                amount: formValue.amount,
+                type: formValue.type,
+                category: formValue.category,
+                date: new Date(formValue.date).toISOString()
+            };
 
-            if (t) {
-                // Update
-                this.budgetService.updateTransaction(t.id, {
-                    ...formValue,
-                    date: formValue.date || new Date().toISOString()
+            if (this.isEditMode && this.editingId) {
+                // Fix: Ensure we pass the COMPLETE transaction object with ID
+                this.budgetService.updateTransaction({
+                    id: this.editingId,
+                    ...transactionData
                 });
-                this.editState.cancelEdit();
+                this.cancelEdit();
             } else {
-                // Create
-                this.budgetService.addTransaction({
-                    description: formValue.description,
-                    amount: formValue.amount,
-                    type: formValue.type,
-                    date: formValue.date || new Date().toISOString()
+                this.budgetService.addTransaction(transactionData);
+                this.transactionForm.reset({
+                    type: 'expense',
+                    category: 'other',
+                    date: new Date().toISOString().substring(0, 10)
                 });
-                this.transactionForm.reset({ type: 'expense', date: new Date().toISOString().split('T')[0] });
             }
-        } else {
-            Object.keys(this.transactionForm.controls).forEach(key => {
-                const control = this.transactionForm.get(key);
-                if (control?.invalid) {
-                    control.markAsTouched();
-                }
-            });
         }
     }
 
-    isFieldInvalid(fieldName: string): boolean {
-        const field = this.transactionForm.get(fieldName);
-        return field ? (field.invalid && (field.dirty || field.touched)) : false;
+    isFieldInvalid(field: string): boolean {
+        const control = this.transactionForm.get(field);
+        return control ? (control.invalid && (control.dirty || control.touched)) : false;
     }
 }
