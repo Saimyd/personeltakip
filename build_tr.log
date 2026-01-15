@@ -1,0 +1,13 @@
+[33m❯[39m Building...
+[32m✔[39m Building...
+[1mInitial chunk files[22m  [2m | [22m[1mNames[22m        [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mmain-PQFXOC22.js[39m     [2m | [22m[2mmain[22m         [2m | [22m[36m198.09 kB[39m[2m | [22m               [36m55.17 kB[39m
+[32mpolyfills-5CFQRCPP.js[39m[2m | [22m[2mpolyfills[22m    [2m | [22m [36m34.59 kB[39m[2m | [22m               [36m11.33 kB[39m
+[32mstyles-5INURTSO.css[39m  [2m | [22m[2mstyles[22m       [2m | [22m  [36m0 bytes[39m[2m | [22m                [36m0 bytes[39m
+
+[1m [22m                    [2m | [22m[1mInitial total[22m[2m | [22m[1m232.68 kB[22m[2m | [22m               [1m66.50 kB[22m
+
+Application bundle generation complete. [2.479 seconds] - 2026-01-15T22:33:03.142Z
+
+Output location: C:\Users\saim4\Desktop\Yazilim_gelistirme\budget-app\dist\budget-app
+

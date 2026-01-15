@@ -1,0 +1,47 @@
+<div class="card shadow-sm">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0">İşlem Geçmişi</h5>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive" *ngIf="budgetService.transactions().length > 0; else noData">
+            <table class="table table-striped table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Tarih</th>
+                        <th>Açıklama</th>
+                        <th>Tür</th>
+                        <th class="text-end">Tutar</th>
+                        <th class="text-center">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let t of budgetService.transactions()">
+                        <td>{{ t.date | date:'mediumDate' }}</td>
+                        <td>{{ t.description }}</td>
+                        <td>
+                            <span class="badge" [class.text-bg-success]="t.type === 'income'"
+                                [class.text-bg-danger]="t.type === 'expense'">
+                                {{ t.type === 'income' ? 'Gelir' : 'Gider' }}
+                            </span>
+                        </td>
+                        <td class="text-end" [class.text-success]="t.type === 'income'"
+                            [class.text-danger]="t.type === 'expense'">
+                            {{ t.amount | currency:'TRY':'symbol-narrow':'1.2-2' }}
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-danger"
+                                (click)="budgetService.deleteTransaction(t.id)">
+                                &times;
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <ng-template #noData>
+            <div class="text-center p-4 text-muted">
+                Henüz işlem yok. Başlamak için yeni bir tane ekleyin!
+            </div>
+        </ng-template>
+    </div>
+</div>

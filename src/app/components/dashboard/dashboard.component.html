@@ -1,0 +1,26 @@
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-success shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="card-title opacity-75">Toplam Gelir</h6>
+                <h3 class="card-text">{{ budgetService.totalIncome() | currency:'TRY':'symbol-narrow':'1.2-2' }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-danger shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="card-title opacity-75">Toplam Gider</h6>
+                <h3 class="card-text">{{ budgetService.totalExpense() | currency:'TRY':'symbol-narrow':'1.2-2' }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-primary shadow-sm h-100">
+            <div class="card-body">
+                <h6 class="card-title opacity-75">Mevcut Bakiye</h6>
+                <h3 class="card-text">{{ budgetService.totalBalance() | currency:'TRY':'symbol-narrow':'1.2-2' }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
