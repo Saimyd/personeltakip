@@ -1,5 +1,6 @@
-import { Component, effect, signal } from '@angular/core';
+import { Component, effect, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LayoutService, ActiveView } from '../../services/layout.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -9,11 +10,11 @@ import { CommonModule } from '@angular/common';
     styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
+    layoutService = inject(LayoutService);
     isDarkMode = signal<boolean>(false);
     isExpanded = signal<boolean>(true);
 
     constructor() {
-        // Check system preference or local storage
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
             this.isDarkMode.set(savedTheme === 'dark');
@@ -22,7 +23,6 @@ export class SidebarComponent {
             this.isDarkMode.set(prefersDark);
         }
 
-        // Apply theme effect
         effect(() => {
             document.body.setAttribute('data-theme', this.isDarkMode() ? 'dark' : 'light');
             localStorage.setItem('theme', this.isDarkMode() ? 'dark' : 'light');
