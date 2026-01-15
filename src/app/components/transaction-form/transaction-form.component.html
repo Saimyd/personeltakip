@@ -1,44 +1,43 @@
-<div class="card shadow-sm mb-4">
-    <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">İşlem Ekle</h5>
-    </div>
-    <div class="card-body">
+<div class="card shadow-lg border-0 mb-4 h-100">
+    <div class="card-body p-4">
+        <h4 class="card-title mb-4 fw-bold text-primary">İşlem Ekle</h4>
+
         <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
-            <div class="mb-3">
-                <label for="description" class="form-label">Açıklama</label>
+            <div class="form-floating mb-3">
                 <input type="text" id="description" class="form-control" formControlName="description"
-                    [class.is-invalid]="isFieldInvalid('description')">
+                    [class.is-invalid]="isFieldInvalid('description')" placeholder="Açıklama">
+                <label for="description">Açıklama</label>
                 <div class="invalid-feedback" *ngIf="isFieldInvalid('description')">
                     Açıklama gereklidir (en az 3 karakter).
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label for="amount" class="form-label">Tutar</label>
+            <div class="form-floating mb-4">
                 <input type="number" id="amount" class="form-control" formControlName="amount"
-                    [class.is-invalid]="isFieldInvalid('amount')">
+                    [class.is-invalid]="isFieldInvalid('amount')" placeholder="Tutar">
+                <label for="amount">Tutar</label>
                 <div class="invalid-feedback" *ngIf="isFieldInvalid('amount')">
                     Geçerli bir tutar giriniz.
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Tür</label>
-                <div class="d-flex gap-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" formControlName="type" id="typeExpense"
-                            value="expense">
-                        <label class="form-check-label" for="typeExpense">Gider</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" formControlName="type" id="typeIncome"
-                            value="income">
-                        <label class="form-check-label" for="typeIncome">Gelir</label>
-                    </div>
+            <div class="mb-4">
+                <label class="form-label text-muted small text-uppercase fw-bold mb-2">İşlem Türü</label>
+                <div class="d-flex gap-2">
+                    <input type="radio" class="btn-check" name="type" formControlName="type" id="typeExpense"
+                        value="expense" autocomplete="off">
+                    <label class="btn btn-outline-danger flex-grow-1" for="typeExpense">Gider</label>
+
+                    <input type="radio" class="btn-check" name="type" formControlName="type" id="typeIncome"
+                        value="income" autocomplete="off">
+                    <label class="btn btn-outline-success flex-grow-1" for="typeIncome">Gelir</label>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-success w-100" [disabled]="transactionForm.invalid">Ekle</button>
+            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold shadow-sm"
+                [disabled]="transactionForm.invalid">
+                + İŞLEM EKLE
+            </button>
         </form>
     </div>
 </div>

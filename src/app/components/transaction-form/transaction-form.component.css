@@ -1,0 +1,12 @@
+/* Custom form styles if needed overrides */
+.btn-check:checked+.btn-outline-danger {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    color: white;
+}
+
+.btn-check:checked+.btn-outline-success {
+    background-color: #2ec4b6;
+    border-color: #2ec4b6;
+    color: white;
+}

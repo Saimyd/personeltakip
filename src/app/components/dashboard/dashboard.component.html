@@ -1,25 +1,39 @@
-<div class="row g-3 mb-4">
+<div class="row g-4 mb-5">
     <div class="col-md-4">
-        <div class="card text-white bg-success shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-title opacity-75">Toplam Gelir</h6>
-                <h3 class="card-text">{{ budgetService.totalIncome() | currency:'TRY':'symbol-narrow':'1.2-2' }}</h3>
+        <div class="card h-100 border-0 bg-success-gradient text-white">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="card-title text-uppercase letter-spacing-2 mb-0 opacity-75">Toplam Gelir</h6>
+                    <i class="bi bi-arrow-up-circle fs-4 text-white-50"></i>
+                </div>
+                <h2 class="display-6 fw-bold mb-0">{{ budgetService.totalIncome() |
+                    currency:'TRY':'symbol-narrow':'1.2-2' }}</h2>
             </div>
         </div>
     </div>
+
     <div class="col-md-4">
-        <div class="card text-white bg-danger shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-title opacity-75">Toplam Gider</h6>
-                <h3 class="card-text">{{ budgetService.totalExpense() | currency:'TRY':'symbol-narrow':'1.2-2' }}</h3>
+        <div class="card h-100 border-0 bg-danger-gradient text-white">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="card-title text-uppercase letter-spacing-2 mb-0 opacity-75">Toplam Gider</h6>
+                    <i class="bi bi-arrow-down-circle fs-4 text-white-50"></i>
+                </div>
+                <h2 class="display-6 fw-bold mb-0">{{ budgetService.totalExpense() |
+                    currency:'TRY':'symbol-narrow':'1.2-2' }}</h2>
             </div>
         </div>
     </div>
+
     <div class="col-md-4">
-        <div class="card text-white bg-primary shadow-sm h-100">
-            <div class="card-body">
-                <h6 class="card-title opacity-75">Mevcut Bakiye</h6>
-                <h3 class="card-text">{{ budgetService.totalBalance() | currency:'TRY':'symbol-narrow':'1.2-2' }}</h3>
+        <div class="card h-100 border-0 bg-primary-gradient text-white">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="card-title text-uppercase letter-spacing-2 mb-0 opacity-75">Mevcut Bakiye</h6>
+                    <i class="bi bi-wallet2 fs-4 text-white-50"></i>
+                </div>
+                <h2 class="display-6 fw-bold mb-0">{{ budgetService.totalBalance() |
+                    currency:'TRY':'symbol-narrow':'1.2-2' }}</h2>
             </div>
         </div>
     </div>

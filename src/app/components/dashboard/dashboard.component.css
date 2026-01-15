@@ -1,0 +1,16 @@
+.bg-success-gradient {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+}
+
+.bg-danger-gradient {
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+}
+
+.bg-primary-gradient {
+    background: linear-gradient(135deg, #4361ee, #7209b7);
+}
+
+.letter-spacing-2 {
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+}

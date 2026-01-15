@@ -1,0 +1,43 @@
+.custom-table th {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-bottom-width: 1px;
+}
+
+.custom-table td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.fs-7 {
+    font-size: 0.75rem;
+}
+
+.bg-success-subtle {
+    background-color: #d1e7dd;
+}
+
+.text-success-emphasis {
+    color: #0a3622;
+}
+
+.bg-danger-subtle {
+    background-color: #f8d7da;
+}
+
+.text-danger-emphasis {
+    color: #58151c;
+}
+
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    line-height: 32px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.btn-icon:hover {
+    background-color: #fee2e2;
+}

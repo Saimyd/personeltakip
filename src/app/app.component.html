@@ -1,18 +1,30 @@
-<div class="container py-5">
-    <div class="row mb-4">
-        <div class="col">
-            <h1 class="display-4 text-center">Bütçe Takip Sistemi</h1>
-            <p class="text-center lead text-muted">Kişisel finansınızı verimli bir şekilde yönetin</p>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg glass-effect mb-5 sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
+            <i class="bi bi-wallet-fill text-primary"></i>
+            <span class="text-gradient">Bütçem</span>
+        </a>
+    </div>
+</nav>
+
+<div class="container pb-5">
+    <div class="row mb-5 fade-in-up">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-5 fw-bold mb-2">Finansal Özgürlüğe Adım Atın</h1>
+            <p class="lead text-muted">Gelir ve giderlerinizi kolayca takip edin, bütçenizi kontrol altında tutun.</p>
         </div>
     </div>
 
-    <app-dashboard></app-dashboard>
+    <div class="fade-in-up delay-100">
+        <app-dashboard></app-dashboard>
+    </div>
 
-    <div class="row mt-4">
-        <div class="col-lg-4 mb-4">
+    <div class="row mt-4 g-4">
+        <div class="col-lg-4 fade-in-up delay-200">
             <app-transaction-form></app-transaction-form>
         </div>
-        <div class="col-lg-8">
+        <div class="col-lg-8 fade-in-up delay-300">
             <app-transaction-list></app-transaction-list>
         </div>
     </div>

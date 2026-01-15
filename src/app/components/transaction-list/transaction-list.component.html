@@ -1,37 +1,43 @@
-<div class="card shadow-sm">
-    <div class="card-header bg-secondary text-white">
-        <h5 class="mb-0">İşlem Geçmişi</h5>
+<div class="card shadow border-0">
+    <div class="card-header bg-white border-0 py-3 d-flex align-items-center">
+        <h5 class="mb-0 fw-bold text-secondary">İşlem Geçmişi</h5>
+        <span class="badge bg-light text-dark ms-2 rounded-pill border">{{ budgetService.transactions().length }}
+            kayıt</span>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive" *ngIf="budgetService.transactions().length > 0; else noData">
-            <table class="table table-striped table-hover mb-0">
-                <thead>
+            <table class="table table-hover align-middle mb-0 custom-table">
+                <thead class="bg-light">
                     <tr>
-                        <th>Tarih</th>
-                        <th>Açıklama</th>
-                        <th>Tür</th>
-                        <th class="text-end">Tutar</th>
-                        <th class="text-center">İşlem</th>
+                        <th class="ps-4 text-secondary text-uppercase fs-7">Tarih</th>
+                        <th class="text-secondary text-uppercase fs-7">Açıklama</th>
+                        <th class="text-secondary text-uppercase fs-7">Tür</th>
+                        <th class="text-end text-secondary text-uppercase fs-7">Tutar</th>
+                        <th class="text-center text-secondary text-uppercase fs-7 pe-4">İşlem</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let t of budgetService.transactions()">
-                        <td>{{ t.date | date:'mediumDate' }}</td>
-                        <td>{{ t.description }}</td>
+                        <td class="ps-4 text-muted fw-medium">{{ t.date | date:'mediumDate' }}</td>
+                        <td class="fw-semibold text-dark">{{ t.description }}</td>
                         <td>
-                            <span class="badge" [class.text-bg-success]="t.type === 'income'"
-                                [class.text-bg-danger]="t.type === 'expense'">
+                            <span class="badge rounded-pill px-3 py-2 fw-normal"
+                                [class.bg-success-subtle]="t.type === 'income'"
+                                [class.text-success-emphasis]="t.type === 'income'"
+                                [class.bg-danger-subtle]="t.type === 'expense'"
+                                [class.text-danger-emphasis]="t.type === 'expense'">
                                 {{ t.type === 'income' ? 'Gelir' : 'Gider' }}
                             </span>
                         </td>
-                        <td class="text-end" [class.text-success]="t.type === 'income'"
+                        <td class="text-end fw-bold" [class.text-success]="t.type === 'income'"
                             [class.text-danger]="t.type === 'expense'">
-                            {{ t.amount | currency:'TRY':'symbol-narrow':'1.2-2' }}
+                            {{ t.type === 'income' ? '+' : '-' }} {{ t.amount | currency:'TRY':'symbol-narrow':'1.2-2'
+                            }}
                         </td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-danger"
-                                (click)="budgetService.deleteTransaction(t.id)">
-                                &times;
+                        <td class="text-center pe-4">
+                            <button class="btn btn-sm btn-icon btn-light text-danger"
+                                (click)="budgetService.deleteTransaction(t.id)" title="Sil">
+                                <i class="bi bi-trash"></i>
                             </button>
                         </td>
                     </tr>
@@ -39,8 +45,12 @@
             </table>
         </div>
         <ng-template #noData>
-            <div class="text-center p-4 text-muted">
-                Henüz işlem yok. Başlamak için yeni bir tane ekleyin!
+            <div class="text-center py-5">
+                <div class="mb-3">
+                    <i class="bi bi-receipt text-black-50" style="font-size: 3rem;"></i>
+                </div>
+                <p class="text-muted mb-0">Henüz işlem bulunmuyor.</p>
+                <p class="text-muted small">Yeni bir gelir veya gider ekleyerek başlayın.</p>
             </div>
         </ng-template>
     </div>

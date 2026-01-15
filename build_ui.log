@@ -1,0 +1,26 @@
+[33m❯[39m Building...
+[32m✔[39m Building...
+[1mInitial chunk files[22m  [2m | [22m[1mNames[22m        [2m | [22m [1mRaw size[22m[2m | [22m[1mEstimated transfer size[22m
+[32mmain-SEPL3AX6.js[39m     [2m | [22m[2mmain[22m         [2m | [22m[36m202.25 kB[39m[2m | [22m               [36m56.38 kB[39m
+[32mpolyfills-5CFQRCPP.js[39m[2m | [22m[2mpolyfills[22m    [2m | [22m [36m34.59 kB[39m[2m | [22m               [36m11.33 kB[39m
+[32mstyles-XOTVS6ZI.css[39m  [2m | [22m[2mstyles[22m       [2m | [22m  [36m1.24 kB[39m[2m | [22m              [36m441 bytes[39m
+
+[1m [22m                    [2m | [22m[1mInitial total[22m[2m | [22m[1m238.07 kB[22m[2m | [22m               [1m68.15 kB[22m
+
+Application bundle generation complete. [2.766 seconds] - 2026-01-15T22:39:54.936Z
+
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mAll "@import" rules must come first[0m [1m[35m[plugin angular-compiler][0m [invalid-@import]
+
+    src/app/app.component.css:15:0:
+[37m      15 │ [32m@import[37m url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/f...
+         ╵ [32m~~~~~~~[0m
+
+  This rule cannot come before an "@import" rule
+
+    src/app/app.component.css:1:0:
+[37m      1 │ [32m[37m.glass-effect {
+        ╵ [32m^[0m
+
+[39m[22m
+Output location: C:\Users\saim4\Desktop\Yazilim_gelistirme\budget-app\dist\budget-app
+
