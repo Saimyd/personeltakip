@@ -1,0 +1,108 @@
+<div class="row g-4 justify-content-center fade-in-up">
+    <!-- Toolbar -->
+    <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+        <div class="btn-group shadow-sm bg-white rounded-3 p-1" role="group">
+            <button type="button" class="btn btn-sm btn-light border-0 px-3 fw-medium"
+                [class.active-filter]="selectedPeriod() === 'month'" (click)="setPeriod('month')">Bu Ay</button>
+            <button type="button" class="btn btn-sm btn-light border-0 px-3 fw-medium"
+                [class.active-filter]="selectedPeriod() === 'year'" (click)="setPeriod('year')">Bu Yıl</button>
+            <button type="button" class="btn btn-sm btn-light border-0 px-3 fw-medium"
+                [class.active-filter]="selectedPeriod() === 'all'" (click)="setPeriod('all')">Tümü</button>
+        </div>
+
+        <button class="btn btn-sm btn-outline-primary d-flex align-items-center gap-2" (click)="addDemoData()">
+            <i class="bi bi-magic"></i> Örnek Veri
+        </button>
+    </div>
+
+    <!-- Empty State -->
+    <div class="col-12" *ngIf="filteredTransactions().length === 0">
+        <div class="alert alert-light border-0 shadow-sm text-center py-5">
+            <h5 class="text-muted mb-3">Bu dönem için veri bulunamadı.</h5>
+            <p class="small text-secondary mb-0">Seçili dönemde ({{ selectedPeriod() | titlecase }}) işlem kaydınız yok.
+            </p>
+        </div>
+    </div>
+
+    <!-- Charts Area -->
+    <ng-container *ngIf="filteredTransactions().length > 0">
+        <!-- Donut Chart -->
+        <div class="col-md-6 col-lg-5">
+            <div
+                class="card h-100 border-0 p-4 text-center d-flex flex-column align-items-center position-relative overflow-hidden card-gradient-border shadow-sm">
+                <div class="position-absolute top-0 start-0 w-100 h-100 bg-primary-subtle opacity-10"
+                    style="z-index: 0;"></div>
+                <div style="z-index: 1; width: 100%;">
+                    <h5 class="fw-bold mb-4 text-gradient">Gelir / Gider Dağılımı</h5>
+
+                    <div class="position-relative mx-auto" style="width: 200px; height: 200px;">
+                        <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path class="circle-bg"
+                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="circle-income" [attr.stroke-dasharray]="getIncomeDashArray()"
+                                stroke-linecap="round" style="filter: drop-shadow(0 0 4px var(--success-color));"
+                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <div class="position-absolute top-50 start-50 translate-middle text-center">
+                            <h6 class="text-muted small mb-0 text-uppercase"
+                                style="font-size: 0.65rem; letter-spacing: 1px;">Kazanç Oranı</h6>
+                            <span class="fw-bold fs-3 text-glow-success">%{{ (filteredIncome() / (filteredIncome() +
+                                filteredExpense())) * 100 | number:'1.0-0' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bar Stats -->
+        <div class="col-md-6 col-lg-5">
+            <div class="d-flex flex-column gap-3 h-100">
+                <!-- Income Stat -->
+                <div class="card border-0 p-3 card-gradient-border shadow-sm"
+                    style="--primary-color: var(--success-color)">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted small mb-1">Dönem Geliri</h6>
+                            <h4 class="mb-0 fw-bold text-success text-glow-success">{{ filteredIncome() |
+                                currency:'TRY':'symbol-narrow':'1.0-0' }}</h4>
+                        </div>
+                        <div class="progress" style="width: 80px; height: 6px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expense Stat -->
+                <div class="card border-0 p-3 card-gradient-border shadow-sm"
+                    style="--primary-color: var(--danger-color)">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted small mb-1">Dönem Gideri</h6>
+                            <h4 class="mb-0 fw-bold text-danger text-glow-danger">{{ filteredExpense() |
+                                currency:'TRY':'symbol-narrow':'1.0-0' }}</h4>
+                        </div>
+                        <div class="progress" style="width: 80px; height: 6px;">
+                            <div class="progress-bar bg-danger" role="progressbar"
+                                [style.width.%]="(filteredExpense() / (filteredIncome() + 0.1)) * 100"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Balance Stat -->
+                <div
+                    class="card border-0 p-3 flex-grow-1 d-flex flex-column justify-content-center bg-primary-subtle shadow-sm">
+                    <h6 class="text-primary fw-bold mb-2">Net Kalan</h6>
+                    <div class="d-flex align-items-baseline gap-2">
+                        <h2 class="mb-0 fw-bold text-primary display-6">{{ filteredBalance() |
+                            currency:'TRY':'symbol-narrow':'1.0-0' }}</h2>
+                        <span class="badge bg-primary text-white rounded-pill"
+                            *ngIf="filteredBalance() > 0">+Pozitif</span>
+                        <span class="badge bg-danger text-white rounded-pill"
+                            *ngIf="filteredBalance() < 0">-Negatif</span>
+                    </div>
+                    <p class="small text-muted mb-0 mt-2">Bu dönem için net nakit akışınız.</p>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>

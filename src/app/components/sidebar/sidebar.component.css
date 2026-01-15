@@ -16,7 +16,6 @@
 }
 
 .sidebar.collapsed .logo-text,
-.sidebar.collapsed .toggle-btn,
 .sidebar.collapsed .nav-link span,
 .sidebar.collapsed .btn span {
     display: none;

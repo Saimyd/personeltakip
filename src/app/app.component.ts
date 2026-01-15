@@ -4,6 +4,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { TransactionFormComponent } from './components/transaction-form/transaction-form.component';
 import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
+import { ReportsComponent } from './components/reports/reports.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { LayoutService } from './services/layout.service';
 import { BudgetService } from './services/budget.service';
@@ -25,6 +26,7 @@ import { BudgetService } from './services/budget.service';
 export class AppComponent {
     layoutService = inject(LayoutService);
     budgetService = inject(BudgetService);
+    today = new Date();
 
     getIncomeDashArray(): string {
         const income = this.budgetService.totalIncome();

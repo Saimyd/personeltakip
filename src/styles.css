@@ -23,18 +23,53 @@
     --primary-color: #60a5fa;
     --secondary-color: #3b82f6;
     --accent-color: #38bdf8;
-    --success-color: #2dd4bf;
-    --danger-color: #fb7185;
+    --success-color: #34d399;
+    /* Sweeter green */
+    --danger-color: #f472b6;
+    /* Sweeter pink/red */
     --background-color: #0f172a;
-    /* Deep slate */
-    --card-bg: rgba(30, 41, 59, 0.7);
-    /* Dark glass */
-    --text-primary: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --border-color: rgba(51, 65, 85, 0.5);
-    --sidebar-bg: rgba(15, 23, 42, 0.8);
+    --card-bg: rgba(30, 41, 59, 0.85);
+    /* Slightly more opaque */
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --border-color: rgba(148, 163, 184, 0.2);
+    --sidebar-bg: rgba(15, 23, 42, 0.95);
     --input-bg: rgba(30, 41, 59, 0.5);
-    --card-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    --card-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+
+    /* Neon Glows */
+    --glow-primary: 0 0 15px rgba(96, 165, 250, 0.3);
+    --glow-success: 0 0 15px rgba(52, 211, 153, 0.3);
+    --glow-danger: 0 0 15px rgba(244, 114, 182, 0.3);
+}
+
+/* Glowing text classes */
+.text-glow-primary {
+    text-shadow: var(--glow-primary, none);
+}
+
+.text-glow-success {
+    text-shadow: var(--glow-success, none);
+}
+
+.text-glow-danger {
+    text-shadow: var(--glow-danger, none);
+}
+
+/* Card with top border gradient */
+.card-gradient-border {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-gradient-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
 }
 
 /* Base Body with Mesh Gradient */
@@ -114,6 +149,30 @@ h6 {
     border-color: var(--border-color);
 }
 
+/* FIX TABLES IN DARK MODE */
+[data-theme="dark"] .table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--text-primary);
+    --bs-table-border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .table-hover>tbody>tr:hover>* {
+    --bs-table-accent-bg: rgba(255, 255, 255, 0.05);
+    /* Subtle hover for dark mode */
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] thead th {
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] td {
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
 /* Dashboard Cards Compact */
 .stat-card-title {
     font-size: 0.75rem;
@@ -145,6 +204,51 @@ h6 {
     color: var(--text-primary);
 }
 
+/* BUTTONS FIX */
+.btn-check:checked+.btn-outline-danger {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    color: white;
+}
+
+.btn-check:checked+.btn-outline-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+    color: white;
+}
+
+.btn-outline-danger,
+.btn-outline-success {
+    backdrop-filter: blur(4px);
+    background-color: rgba(255, 255, 255, 0.5);
+    /* Semi transparent for visibility */
+    border-color: currentColor;
+}
+
+[data-theme="dark"] .btn-outline-danger,
+[data-theme="dark"] .btn-outline-success {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure icons are visible */
+.btn-light {
+    background-color: #f1f5f9;
+    /* Slight gray for contrast against white card */
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.btn-light:hover {
+    background-color: #e2e8f0;
+}
+
+[data-theme="dark"] .btn-light {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border-color: transparent;
+}
+
+
 /* Sidebar Specific */
 .sidebar {
     background-color: var(--sidebar-bg);
@@ -158,10 +262,19 @@ h6 {
 }
 
 .sidebar.collapsed .logo-text,
-.sidebar.collapsed .toggle-btn,
 .sidebar.collapsed .nav-link span,
 .sidebar.collapsed .btn span {
     display: none;
+}
+
+.sidebar.collapsed .toggle-btn {
+    margin: 0 auto;
+    /* Center it */
+}
+
+.sidebar.collapsed .d-flex.justify-content-between {
+    justify-content: center !important;
+    /* Center the header content */
 }
 
 .sidebar.collapsed .nav-link {

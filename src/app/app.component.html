@@ -18,7 +18,7 @@
                     <p class="text-muted small mb-0">Finansal durumunuzu yönetin</p>
                 </div>
                 <div class="today-date text-muted small fw-medium text-uppercase letter-spacing-1">
-                    {{ 0 | date:'fullDate' }}
+                    {{ today | date:'fullDate' }}
                 </div>
             </div>
 
@@ -58,9 +58,11 @@
             <!-- REPORTS VIEW -->
             <div *ngIf="layoutService.activeView() === 'reports'" class="fade-in-up delay-100">
                 <div class="row g-4 justify-content-center">
+
+                    <!-- Main Chart -->
                     <div class="col-md-6 col-lg-5">
                         <div
-                            class="card h-100 border-0 p-4 text-center d-flex flex-column align-items-center position-relative overflow-hidden">
+                            class="card h-100 border-0 p-4 text-center d-flex flex-column align-items-center position-relative overflow-hidden card-gradient-border">
                             <div class="position-absolute top-0 start-0 w-100 h-100 bg-primary-subtle opacity-10"
                                 style="z-index: 0;"></div>
                             <div style="z-index: 1; width: 100%;">
@@ -71,39 +73,68 @@
                                         <path class="circle-bg"
                                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                                         <path class="circle-income" [attr.stroke-dasharray]="getIncomeDashArray()"
+                                            stroke-linecap="round"
+                                            style="filter: drop-shadow(0 0 4px var(--success-color));"
                                             d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                                     </svg>
                                     <div class="position-absolute top-50 start-50 translate-middle text-center">
                                         <h6 class="text-muted small mb-0 text-uppercase"
                                             style="font-size: 0.7rem; letter-spacing: 1px;">Toplam Hacim</h6>
-                                        <span class="fw-bold fs-4">{{ (budgetService.totalIncome() +
+                                        <span class="fw-bold fs-4 text-glow-primary">{{ (budgetService.totalIncome() +
                                             budgetService.totalExpense()) | currency:'TRY':'symbol-narrow':'1.0-0'
                                             }}</span>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                <div class="mt-4 w-100">
-                                    <div
-                                        class="d-flex justify-content-between align-items-center mb-2 p-3 rounded-3 bg-light-subtle border">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <span class="badge rounded-circle p-1"
-                                                style="background-color: var(--success-color); width: 10px; height: 10px;"></span>
-                                            <span class="small fw-semibold">Gelirler</span>
-                                        </div>
-                                        <span class="fw-bold text-success">{{ budgetService.totalIncome() |
-                                            currency:'TRY':'symbol-narrow':'1.2-2' }}</span>
+                    <!-- Breakdown & Projections -->
+                    <div class="col-md-6 col-lg-5">
+                        <div class="d-flex flex-column gap-3 h-100">
+                            <!-- Income Stat -->
+                            <div class="card border-0 p-3 card-gradient-border"
+                                style="--primary-color: var(--success-color)">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-muted small mb-1">Toplam Gelir</h6>
+                                        <h4 class="mb-0 fw-bold text-success text-glow-success">{{
+                                            budgetService.totalIncome() | currency:'TRY':'symbol-narrow':'1.2-2' }}</h4>
                                     </div>
                                     <div
-                                        class="d-flex justify-content-between align-items-center p-3 rounded-3 bg-light-subtle border">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <span class="badge rounded-circle p-1"
-                                                style="background-color: var(--danger-color); width: 10px; height: 10px;"></span>
-                                            <span class="small fw-semibold">Giderler</span>
-                                        </div>
-                                        <span class="fw-bold text-danger">{{ budgetService.totalExpense() |
-                                            currency:'TRY':'symbol-narrow':'1.2-2' }}</span>
+                                        class="icon-circle bg-success-subtle text-success d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-arrow-up-right fs-5"></i>
                                     </div>
                                 </div>
+                            </div>
+
+                            <!-- Expense Stat -->
+                            <div class="card border-0 p-3 card-gradient-border"
+                                style="--primary-color: var(--danger-color)">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-muted small mb-1">Toplam Gider</h6>
+                                        <h4 class="mb-0 fw-bold text-danger text-glow-danger">{{
+                                            budgetService.totalExpense() | currency:'TRY':'symbol-narrow':'1.2-2' }}
+                                        </h4>
+                                    </div>
+                                    <div
+                                        class="icon-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-arrow-down-right fs-5"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Net Stat -->
+                            <div
+                                class="card border-0 p-3 flex-grow-1 d-flex flex-column justify-content-center bg-primary-subtle">
+                                <h6 class="text-primary fw-bold mb-2">Net Durum</h6>
+                                <div class="d-flex align-items-baseline gap-2">
+                                    <h2 class="mb-0 fw-bold text-primary display-6">{{ budgetService.totalBalance() |
+                                        currency:'TRY':'symbol-narrow':'1.0-0' }}</h2>
+                                    <span class="badge bg-primary text-white rounded-pill">Nakit</span>
+                                </div>
+                                <p class="small text-muted mb-0 mt-2">Güncel bakiyeniz ve kullanılabilir limitiniz.</p>
                             </div>
                         </div>
                     </div>
