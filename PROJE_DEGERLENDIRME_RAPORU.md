@@ -6,14 +6,14 @@ Bu belge, geliştirilen "Kişisel Bütçe Takip Sistemi" projesinin belirtilen y
 - [x] **Fonksiyonel ve fonksiyonel olmayan gereksinimlerin açık biçimde belirlenmiş olması**
     *   **Açıklama:** Kullanıcının isteği üzerine gelir/gider ekleme, silme, düzenleme, listeleme ve grafiksel raporlama özellikleri belirlendi ve uygulandı. Karanlık mod (Dark Mode) gibi görsel gereksinimler karşılandı.
 - [x] **Gereksinimlerin uygulamaya eksiksiz yansıtılması**
-    *   **Açıklama:** Belirlenen tüm özellikler (CRUD işlemleri, kategoriler, raporlar, yerel depolama) eksiksiz olarak kodlandı.
+    *   **Açıklama:** Belirlenen tüm özellikler (CRUD işlemleri, kategoriler, raporlar, yerel depolama) eksiksiz olarak kodlandı. Ayrıca global kullanım için **Çoklu Dil (Türkçe/İngilizce)** ve **Dinamik Para Birimi (TRY, USD, EUR, GBP)** desteği eklendi. Kullanıcı Profil Yönetimi sistemi entegre edildi.
 
 ## 2. Uygun Yazılım Mimarisi Kullanımı
 - [x] **Katmanlı yapı, MVC veya benzeri mimari yaklaşımın tutarlı biçimde uygulanması**
     *   **Açıklama:** Angular'ın bileşen tabanlı mimarisi kullanıldı.
         *   **View (Görünüm):** HTML/CSS dosyaları (`TransactionListComponent`, `ReportsComponent` vb.).
         *   **Logic (Mantık):** TypeScript bileşen dosyaları (Controller görevi görür).
-        *   **Data/Service (Veri):** `BudgetService` ve `StorageService` ile veri yönetimi ayrıştırıldı.
+        *   **Data/Service (Veri):** `BudgetService`, `StorageService`, `TranslationService` (Dil ve Para Birimi) ve `ProfileService` ile veri yönetimi ve uygulama durumu (state) merkezi olarak yönetildi.
 - [x] **Bileşenler arası bağımlılıkların düşük tutulması**
     *   **Açıklama:** Bağımsız bileşenler (Standalone Components) kullanıldı. Bileşenler birbirine doğrudan bağımlı olmak yerine, durumu yönetmek için `BudgetService` ve `EditStateService` gibi ortak servisleri kullanıyor (Dependency Injection).
 
@@ -21,7 +21,7 @@ Bu belge, geliştirilen "Kişisel Bütçe Takip Sistemi" projesinin belirtilen y
 - [x] **Kodun fonksiyonlara/sınıflara bölünmüş olması**
     *   **Açıklama:** Proje; `Dashboard`, `TransactionList`, `TransactionForm`, `Reports` gibi modüler parçalara bölündü. Her parçanın sorumluluğu ayrıdır (Single Responsibility).
 - [x] **Tekrar eden kodlardan kaçınılması ve yeniden kullanılabilirlik**
-    *   **Açıklama:** Veritabanı işlemleri (`localStorage`) tek bir `StorageService` içinde toplandı, her yerde tekrar yazılmadı. Bildirimler için `NotificationService` oluşturuldu.
+    *   **Açıklama:** Veritabanı işlemleri (`localStorage`) tek bir `StorageService` içinde toplandı. Dil ve para birimi yönetimi `TranslationService` ile merkezileştirildi. Bildirimler için `NotificationService` oluşturuldu.
 
 ## 4. Yazılım Mühendisliği İlkelerine Uygunluk
 - [x] **SOLID, DRY, KISS gibi temel tasarım ilkelerinin gözetilmesi**
@@ -35,13 +35,13 @@ Bu belge, geliştirilen "Kişisel Bütçe Takip Sistemi" projesinin belirtilen y
 - [x] **Tüm temel işlevlerin hatasız çalışması**
     *   **Açıklama:** Ekleme, silme, güncelleme ve kategori filtreleme işlemleri test edildi ve hatasız çalıştığı doğrulandı.
 - [x] **Modüller arası veri akışının tutarlı olması**
-    *   **Açıklama:** Bir işlem eklendiğinde (Form), liste (List) ve grafikler (Report) anlık olarak ve senkronize şekilde güncelleniyor. Bu, `Signals` yapısı ile sağlandı.
+    *   **Açıklama:** Bir işlem eklendiğinde (Form), liste (List) ve grafikler (Report) anlık olarak ve senkronize şekilde güncelleniyor. Ayrıca dil veya para birimi değiştiğinde tüm uygulama arayüzü (Panel, Raporlar, Ayarlar) anında yeni tercihlere uyum sağlıyor. Bu, Angular `Signals` yapısı ile sağlandı.
 
 ## 6. Veri Yönetimi ve Kalıcılık
 - [x] **Veritabanı tasarımının uygulama gereksinimlerine uygun olması**
     *   **Açıklama:** `BudgetTransaction` arayüzü (interface) ile veri modeli (ID, açıklama, tutar, tür, kategori, tarih) tip güvenli hale getirildi.
 - [x] **Veri bütünlüğünün korunması**
-    *   **Açıklama:** Veriler tarayıcının `localStorage` alanında JSON formatında kalıcı olarak saklanıyor. Sayfa yenilense bile veriler kaybolmuyor.
+    *   **Açıklama:** Veriler, dil tercihleri, para birimi seçimleri ve kullanıcı profil bilgileri tarayıcının `localStorage` alanında JSON formatında kalıcı olarak saklanıyor. Sayfa yenilense bile veriler ve tercihler kaybolmuyor.
 
 ## 7. API ve Entegrasyon Yapıları
 - [ ] **Servis tabanlı yapıların doğru tasarlanması**
