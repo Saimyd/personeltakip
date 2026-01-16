@@ -2,30 +2,30 @@
     <div class="card-body p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h5 class="card-title fw-bold text-primary mb-0">
-                {{ editState.editingTransaction() ? 'İşlemi Düzenle' : 'İşlem Ekle' }}
+                {{ editState.editingTransaction() ? ts.t('editTransaction') : ts.t('add') + ' ' + ts.t('transactions')
+                }}
             </h5>
             <button *ngIf="editState.editingTransaction()" class="btn btn-sm btn-outline-secondary"
                 (click)="cancelEdit()">
-                İptal
+                {{ ts.t('cancel') }}
             </button>
         </div>
 
         <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
             <div class="form-floating mb-3">
                 <input type="text" id="description" class="form-control" formControlName="description"
-                    [class.is-invalid]="isFieldInvalid('description')" placeholder="Açıklama">
-                <label for="description">Açıklama</label>
-                <div class="invalid-feedback" *ngIf="isFieldInvalid('description')">
-                    Açıklama gereklidir (en az 3 karakter).
-                </div>
+                    [class.is-invalid]="isFieldInvalid('description')" [placeholder]="ts.t('desc')">
+                <label for="description">{{ ts.t('desc') }}</label>
             </div>
 
             <div class="form-floating mb-3">
-                <input type="number" id="amount" class="form-control" formControlName="amount"
-                    [class.is-invalid]="isFieldInvalid('amount')" placeholder="Tutar">
-                <label for="amount">Tutar</label>
-                <div class="invalid-feedback" *ngIf="isFieldInvalid('amount')">
-                    Geçerli bir tutar giriniz.
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0">{{ ts.getCurrencySymbol() }}</span>
+                    <div class="form-floating flex-grow-1">
+                        <input type="number" id="amount" class="form-control border-start-0" formControlName="amount"
+                            [class.is-invalid]="isFieldInvalid('amount')" [placeholder]="ts.t('amt')">
+                        <label for="amount">{{ ts.t('amt') }}</label>
+                    </div>
                 </div>
             </div>
 
@@ -33,47 +33,50 @@
             <div class="form-floating mb-3">
                 <select class="form-select" id="category" formControlName="category"
                     [class.is-invalid]="isFieldInvalid('category')">
-                    <option value="other">Diğer</option>
+                    <option value="other">{{ ts.currentLang() === 'tr' ? 'Diğer' : 'Other' }}</option>
                     <hr>
-                    <optgroup label="Giderler" *ngIf="transactionForm.get('type')?.value === 'expense'">
-                        <option value="housing">Kira / Konut</option>
-                        <option value="food">Gıda / Market</option>
-                        <option value="transport">Ulaşım / Yakıt</option>
-                        <option value="utilities">Faturalar</option>
-                        <option value="entertainment">Eğlence / Aktivite</option>
-                        <option value="health">Sağlık</option>
-                        <option value="shopping">Alışveriş / Giyim</option>
-                        <option value="education">Eğitim</option>
-                        <option value="tech">Teknoloji</option>
+                    <optgroup [label]="ts.t('expense')" *ngIf="transactionForm.get('type')?.value === 'expense'">
+                        <option value="housing">{{ ts.currentLang() === 'tr' ? 'Kira/Konut' : 'Housing' }}</option>
+                        <option value="food">{{ ts.currentLang() === 'tr' ? 'Gıda/Market' : 'Food/Market' }}</option>
+                        <option value="transport">{{ ts.currentLang() === 'tr' ? 'Ulaşım' : 'Transport' }}</option>
+                        <option value="utilities">{{ ts.currentLang() === 'tr' ? 'Faturalar' : 'Utilities' }}</option>
+                        <option value="entertainment">{{ ts.currentLang() === 'tr' ? 'Eğlence' : 'Entertainment' }}
+                        </option>
+                        <option value="health">{{ ts.currentLang() === 'tr' ? 'Sağlık' : 'Health' }}</option>
+                        <option value="shopping">{{ ts.currentLang() === 'tr' ? 'Alışveriş' : 'Shopping' }}</option>
+                        <option value="education">{{ ts.currentLang() === 'tr' ? 'Eğitim' : 'Education' }}</option>
+                        <option value="hobby">{{ ts.currentLang() === 'tr' ? 'Hobi / Spor' : 'Hobby / Sport' }}</option>
+                        <option value="beauty">{{ ts.currentLang() === 'tr' ? 'Kişisel Bakım' : 'Personal Care' }}
+                        </option>
                     </optgroup>
-                    <optgroup label="Gelirler" *ngIf="transactionForm.get('type')?.value === 'income'">
-                        <option value="salary">Maaş</option>
-                        <option value="freelance">Freelance / Ek İş</option>
-                        <option value="investment">Yatırım</option>
-                        <option value="gift">Hediye</option>
+                    <optgroup [label]="ts.t('income')" *ngIf="transactionForm.get('type')?.value === 'income'">
+                        <option value="salary">{{ ts.currentLang() === 'tr' ? 'Maaş' : 'Salary' }}</option>
+                        <option value="freelance">{{ ts.currentLang() === 'tr' ? 'Freelance' : 'Freelance' }}</option>
+                        <option value="investment">{{ ts.currentLang() === 'tr' ? 'Yatırım' : 'Investment' }}</option>
+                        <option value="gift">{{ ts.currentLang() === 'tr' ? 'Hediye' : 'Gift' }}</option>
                     </optgroup>
                 </select>
-                <label for="category">Kategori</label>
+                <label for="category">{{ ts.t('category') }}</label>
             </div>
 
             <input type="hidden" formControlName="date">
 
             <div class="mb-4">
-                <label class="form-label text-muted small text-uppercase fw-bold mb-2">İşlem Türü</label>
+                <label class="form-label text-muted small text-uppercase fw-bold mb-2">{{ ts.t('type') }}</label>
                 <div class="d-flex gap-2">
                     <input type="radio" class="btn-check" name="type" formControlName="type" id="typeExpense"
                         value="expense" autocomplete="off">
-                    <label class="btn btn-outline-danger flex-grow-1" for="typeExpense">Gider</label>
+                    <label class="btn btn-outline-danger flex-grow-1" for="typeExpense">{{ ts.t('expense') }}</label>
 
                     <input type="radio" class="btn-check" name="type" formControlName="type" id="typeIncome"
                         value="income" autocomplete="off">
-                    <label class="btn btn-outline-success flex-grow-1" for="typeIncome">Gelir</label>
+                    <label class="btn btn-outline-success flex-grow-1" for="typeIncome">{{ ts.t('income') }}</label>
                 </div>
             </div>
 
             <button type="submit" class="btn btn-primary w-100 py-3 fw-bold shadow-sm"
                 [disabled]="transactionForm.invalid">
-                {{ editState.editingTransaction() ? 'GÜNCELLE' : '+ İŞLEM EKLE' }}
+                {{ editState.editingTransaction() ? ts.t('save') : '+ ' + ts.t('add').toUpperCase() }}
             </button>
         </form>
     </div>

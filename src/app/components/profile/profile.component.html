@@ -1,0 +1,91 @@
+<div class="profile-container fade-in-up">
+    <div class="row g-4">
+        <!-- Profile Overview Card -->
+        <div class="col-lg-4">
+            <div class="card glass-card border-0 text-center p-4 h-100">
+                <div
+                    class="profile-avatar-large mx-auto mb-3 bg-primary-gradient text-white d-flex align-items-center justify-content-center">
+                    <span class="display-6 fw-bold">{{ profileForm.get('firstName')?.value?.[0] }}{{
+                        profileForm.get('lastName')?.value?.[0] }}</span>
+                </div>
+                <h4 class="fw-bold mb-1">{{ profileForm.get('firstName')?.value }} {{ profileForm.get('lastName')?.value
+                    }}</h4>
+                <p class="text-muted small mb-3">{{ profileForm.get('email')?.value }}</p>
+
+                <div class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2 mb-4">
+                    <i class="bi bi-star-fill me-1"></i> {{ profileForm.get('role')?.value }}
+                </div>
+
+                <hr class="opacity-10 my-4">
+
+                <div class="stats-mini d-flex justify-content-around text-center">
+                    <div>
+                        <small class="text-muted d-block mb-1">{{ ts.currentLang() === 'tr' ? 'Üyelik' : 'Membership'
+                            }}</small>
+                        <span class="fw-bold">{{ ts.currentLang() === 'tr' ? 'Ocak 2024' : 'January 2024' }}</span>
+                    </div>
+                    <div>
+                        <small class="text-muted d-block mb-1">{{ ts.currentLang() === 'tr' ? 'Durum' : 'Status'
+                            }}</small>
+                        <span class="text-success fw-bold">{{ ts.currentLang() === 'tr' ? 'Aktif' : 'Active' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security & Settings Card -->
+        <div class="col-lg-8">
+            <div class="card glass-card border-0 p-4 h-100">
+                <h5 class="fw-bold mb-4">
+                    <i class="bi bi-person-gear me-2 text-primary"></i> {{ ts.currentLang() === 'tr' ? 'Profil
+                    Bilgilerini Düzenle' : 'Edit Profile Information' }}
+                </h5>
+
+                <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" id="firstName" class="form-control" formControlName="firstName"
+                                    [class.is-invalid]="isFieldInvalid('firstName')"
+                                    [placeholder]="ts.currentLang() === 'tr' ? 'Ad' : 'First Name'">
+                                <label for="firstName">{{ ts.currentLang() === 'tr' ? 'Ad' : 'First Name' }}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" id="lastName" class="form-control" formControlName="lastName"
+                                    [class.is-invalid]="isFieldInvalid('lastName')"
+                                    [placeholder]="ts.currentLang() === 'tr' ? 'Soyad' : 'Last Name'">
+                                <label for="lastName">{{ ts.currentLang() === 'tr' ? 'Soyad' : 'Last Name' }}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="email" id="email" class="form-control" formControlName="email"
+                            [class.is-invalid]="isFieldInvalid('email')"
+                            [placeholder]="ts.currentLang() === 'tr' ? 'E-posta Adresi' : 'Email Address'">
+                        <label for="email">{{ ts.currentLang() === 'tr' ? 'E-posta Adresi' : 'Email Address' }}</label>
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        <select class="form-select" id="role" formControlName="role">
+                            <option value="Pro Plan">Pro Plan ({{ ts.currentLang() === 'tr' ? 'Aktif' : 'Active' }})
+                            </option>
+                            <option value="Premium User">Premium User</option>
+                            <option value="Elite Member">Elite Member</option>
+                        </select>
+                        <label for="role">{{ ts.currentLang() === 'tr' ? 'Hesap Türü' : 'Account Type' }}</label>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary px-5 py-3 rounded-4 fw-bold shadow-sm"
+                            [disabled]="profileForm.invalid">
+                            {{ (ts.currentLang() === 'tr' ? 'DEĞİŞİKLİKLERİ KAYDET' : 'SAVE CHANGES') }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

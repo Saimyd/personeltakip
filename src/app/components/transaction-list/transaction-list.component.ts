@@ -2,6 +2,7 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BudgetService } from '../../services/budget.service';
 import { EditStateService } from '../../services/edit-state.service';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
     selector: 'app-transaction-list',
@@ -13,6 +14,7 @@ import { EditStateService } from '../../services/edit-state.service';
 export class TransactionListComponent {
     budgetService = inject(BudgetService);
     editState = inject(EditStateService);
+    ts = inject(TranslationService);
 
     // Signals
     searchTerm = signal('');
@@ -55,10 +57,12 @@ export class TransactionListComponent {
         const yesterday = new Date();
         yesterday.setDate(today.getDate() - 1);
 
-        if (date.toDateString() === today.toDateString()) return 'Bugün';
-        if (date.toDateString() === yesterday.toDateString()) return 'Dün';
+        const lang = this.ts.currentLang();
 
-        return new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' }).format(date);
+        if (date.toDateString() === today.toDateString()) return lang === 'tr' ? 'Bugün' : 'Today';
+        if (date.toDateString() === yesterday.toDateString()) return lang === 'tr' ? 'Dün' : 'Yesterday';
+
+        return new Intl.DateTimeFormat(lang === 'tr' ? 'tr-TR' : 'en-US', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' }).format(date);
     }
 
     getCategoryIcon(category: string, description: string = ''): string {
@@ -78,6 +82,9 @@ export class TransactionListComponent {
             'education': 'bi-book',
             'tech': 'bi-phone',
             'gift': 'bi-gift',
+            'hobby': 'bi-bicycle',
+            'beauty': 'bi-scissors',
+            'fashion': 'bi-bag-check',
             'other': 'bi-circle'
         };
 
@@ -94,40 +101,70 @@ export class TransactionListComponent {
         if (desc.includes('benzin') || desc.includes('taksi') || desc.includes('ulaşım')) return 'bi-fuel-pump';
         if (desc.includes('kahve') || desc.includes('restoran')) return 'bi-cup-hot';
         if (desc.includes('telefon') || desc.includes('internet')) return 'bi-router';
+        if (desc.includes('spor') || desc.includes('fitness') || desc.includes('hobi')) return 'bi-bicycle';
+        if (desc.includes('bakım') || desc.includes('kuaför')) return 'bi-scissors';
+        if (desc.includes('kredi') || desc.includes('borç')) return 'bi-bank';
 
         return 'bi-receipt';
     }
 
     getCategoryName(category: string, description: string = ''): string {
+        const lang = this.ts.currentLang();
         const names: any = {
-            'salary': 'Maaş',
-            'freelance': 'Freelance',
-            'investment': 'Yatırım',
-            'housing': 'Kira/Konut',
-            'food': 'Gıda/Market',
-            'transport': 'Ulaşım',
-            'utilities': 'Faturalar',
-            'entertainment': 'Eğlence',
-            'health': 'Sağlık',
-            'shopping': 'Alışveriş',
-            'education': 'Eğitim',
-            'tech': 'Teknoloji',
-            'gift': 'Hediye',
-            'other': 'Diğer'
+            tr: {
+                'salary': 'Maaş',
+                'freelance': 'Freelance',
+                'investment': 'Yatırım',
+                'housing': 'Kira/Konut',
+                'food': 'Gıda/Market',
+                'transport': 'Ulaşım',
+                'utilities': 'Faturalar',
+                'entertainment': 'Eğlence',
+                'health': 'Sağlık',
+                'shopping': 'Alışveriş',
+                'education': 'Eğitim',
+                'tech': 'Teknoloji',
+                'gift': 'Hediye',
+                'hobby': 'Hobi / Spor',
+                'beauty': 'Kişisel Bakım',
+                'other': 'Diğer'
+            },
+            en: {
+                'salary': 'Salary',
+                'freelance': 'Freelance',
+                'investment': 'Investment',
+                'housing': 'Housing',
+                'food': 'Food/Market',
+                'transport': 'Transport',
+                'utilities': 'Utilities',
+                'entertainment': 'Entertainment',
+                'health': 'Health',
+                'shopping': 'Shopping',
+                'education': 'Education',
+                'tech': 'Technology',
+                'gift': 'Gift',
+                'hobby': 'Hobby / Sport',
+                'beauty': 'Personal Care',
+                'other': 'Other'
+            }
         };
 
-        if (category && category !== 'other' && names[category]) {
-            return names[category];
+        const currentNames = names[lang];
+
+        if (category && category !== 'other' && currentNames[category]) {
+            return currentNames[category];
         }
 
         // Smart Names
         const desc = description.toLowerCase();
-        if (desc.includes('maaş')) return 'Maaş';
-        if (desc.includes('kira')) return 'Kira/Konut';
-        if (desc.includes('market')) return 'Gıda/Market';
-        if (desc.includes('fatura')) return 'Faturalar';
+        if (desc.includes('maaş') || desc.includes('salary')) return currentNames['salary'];
+        if (desc.includes('kira') || desc.includes('rent')) return currentNames['housing'];
+        if (desc.includes('market') || desc.includes('food')) return currentNames['food'];
+        if (desc.includes('fatura') || desc.includes('bill')) return currentNames['utilities'];
+        if (desc.includes('spor') || desc.includes('sport')) return currentNames['hobby'];
+        if (desc.includes('bakım') || desc.includes('beauty')) return currentNames['beauty'];
 
-        return 'Diğer';
+        return currentNames['other'];
     }
 
     getCategoryColor(category: string, description: string = ''): string {
@@ -145,6 +182,9 @@ export class TransactionListComponent {
             'education': 'info',
             'tech': 'dark',
             'gift': 'danger',
+            'hobby': 'primary',
+            'beauty': 'pink',
+            'fashion': 'purple',
             'other': 'secondary'
         };
 
@@ -158,6 +198,9 @@ export class TransactionListComponent {
         if (desc.includes('kira')) return 'warning';
         if (desc.includes('market')) return 'danger';
         if (desc.includes('fatura')) return 'warning';
+        if (desc.includes('spor')) return 'primary';
+        if (desc.includes('bakım')) return 'pink';
+        if (desc.includes('kredi')) return 'dark';
 
         return 'secondary';
     }

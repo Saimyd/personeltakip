@@ -6,8 +6,11 @@ import { TransactionFormComponent } from './components/transaction-form/transact
 import { TransactionListComponent } from './components/transaction-list/transaction-list.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { ReportsComponent } from './components/reports/reports.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { SettingsComponent } from './components/settings/settings.component';
 import { LayoutService } from './services/layout.service';
 import { BudgetService } from './services/budget.service';
+import { TranslationService } from './services/translation.service';
 
 @Component({
     selector: 'app-root',
@@ -19,6 +22,8 @@ import { BudgetService } from './services/budget.service';
         TransactionFormComponent,
         TransactionListComponent,
         ReportsComponent,
+        ProfileComponent,
+        SettingsComponent,
         ToastComponent
     ],
     templateUrl: './app.component.html',
@@ -27,6 +32,7 @@ import { BudgetService } from './services/budget.service';
 export class AppComponent {
     layoutService = inject(LayoutService);
     budgetService = inject(BudgetService);
+    ts = inject(TranslationService);
     today = new Date();
 
     getIncomeDashArray(): string {

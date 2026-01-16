@@ -9,16 +9,20 @@
             <!-- HEADER -->
             <div class="d-flex align-items-center justify-content-between mb-4 fade-in-up">
                 <div>
-                    <h3 class="fw-bold mb-0 text-primary" *ngIf="layoutService.activeView() === 'dashboard'">Genel Bakış
-                    </h3>
-                    <h3 class="fw-bold mb-0 text-primary" *ngIf="layoutService.activeView() === 'transactions'">İşlemler
-                    </h3>
-                    <h3 class="fw-bold mb-0 text-primary" *ngIf="layoutService.activeView() === 'reports'">Finansal
-                        Raporlar</h3>
-                    <p class="text-muted small mb-0">Finansal durumunuzu yönetin</p>
+                    <h3 class="fw-bold mb-0 text-primary" *ngIf="layoutService.activeView() === 'dashboard'">{{
+                        ts.t('dashboard') }}</h3>
+                    <h3 class="fw-bold mb-0 text-primary" *ngIf="layoutService.activeView() === 'transactions'">{{
+                        ts.t('transactions') }}</h3>
+                    <h3 class="fw-bold mb-0 text-primary" *ngIf="layoutService.activeView() === 'reports'">{{
+                        ts.t('reports') }}</h3>
+                    <h3 class="fw-bold mb-0 text-primary" *ngIf="layoutService.activeView() === 'profile'">{{
+                        ts.t('profile') }}</h3>
+                    <h3 class="fw-bold mb-0 text-primary" *ngIf="layoutService.activeView() === 'settings'">{{
+                        ts.t('appSettings') }}</h3>
+                    <p class="text-muted small mb-0">{{ ts.t('manageFinance') }}</p>
                 </div>
                 <div class="today-date text-muted small fw-medium text-uppercase letter-spacing-1">
-                    {{ today | date:'fullDate' }}
+                    {{ today | date:'fullDate' : '' : ts.currentLang() }}
                 </div>
             </div>
 
@@ -31,9 +35,9 @@
                         <div class="card shadow-sm border-0">
                             <div
                                 class="card-header bg-transparent border-0 py-3 d-flex justify-content-between align-items-center">
-                                <h6 class="mb-0 fw-bold">Son İşlemler</h6>
+                                <h6 class="mb-0 fw-bold">{{ ts.t('recentTransactions') }}</h6>
                                 <button class="btn btn-sm btn-light text-primary small"
-                                    (click)="layoutService.setView('transactions')">Tümünü Yönet</button>
+                                    (click)="layoutService.setView('transactions')">{{ ts.t('viewAll') }}</button>
                             </div>
                             <div class="card-body p-0">
                                 <app-transaction-list></app-transaction-list>
@@ -58,6 +62,16 @@
             <!-- REPORTS VIEW -->
             <div *ngIf="layoutService.activeView() === 'reports'" class="fade-in-up delay-100">
                 <app-reports></app-reports>
+            </div>
+
+            <!-- PROFILE VIEW -->
+            <div *ngIf="layoutService.activeView() === 'profile'" class="fade-in-up delay-100">
+                <app-profile></app-profile>
+            </div>
+
+            <!-- SETTINGS VIEW -->
+            <div *ngIf="layoutService.activeView() === 'settings'" class="fade-in-up delay-100">
+                <app-settings></app-settings>
             </div>
         </div>
     </main>

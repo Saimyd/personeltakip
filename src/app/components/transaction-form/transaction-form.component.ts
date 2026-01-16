@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BudgetService } from '../../services/budget.service';
 import { EditStateService } from '../../services/edit-state.service';
+import { TranslationService } from '../../services/translation.service';
 import { BudgetTransaction } from '../../models/transaction.model';
 
 @Component({
@@ -16,6 +17,7 @@ export class TransactionFormComponent {
     fb = inject(FormBuilder);
     budgetService = inject(BudgetService);
     editState = inject(EditStateService);
+    ts = inject(TranslationService);
 
     transactionForm: FormGroup = this.fb.group({
         description: ['', [Validators.required, Validators.minLength(3)]],

@@ -21,48 +21,8 @@
     opacity: 0.1;
 }
 
-/* Custom Colors for Categories */
-.bg-purple {
-    background-color: #6f42c1 !important;
-    color: white;
-}
-
-.bg-pink {
-    background-color: #d63384 !important;
-    color: white;
-}
-
-.bg-info {
-    background-color: #0dcaf0 !important;
-    color: white;
-}
-
-.bg-primary {
-    background-color: #0d6efd !important;
-    color: white;
-}
-
-.bg-success {
-    background-color: #198754 !important;
-    color: white;
-}
-
-.bg-warning {
-    background-color: #ffc107 !important;
-    color: white;
-}
-
-.bg-danger {
-    background-color: #dc3545 !important;
-    color: white;
-}
-
-.bg-dark {
-    background-color: #212529 !important;
-    color: white;
-}
-
-.bg-secondary {
-    background-color: #6c757d !important;
-    color: white;
+/* Custom Colors for Categories - These are now primarily governed by global styles.css
+   Keeping component-specific layout overrides here if any. */
+.opacity-10 {
+    opacity: 0.12;
 }

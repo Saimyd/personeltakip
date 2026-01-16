@@ -1,119 +1,114 @@
-<div class="row g-3 mb-3">
-    <!-- Income Card -->
-    <div class="col-md-4">
-        <div class="card h-100 border-0 overflow-hidden position-relative">
-            <div class="card-body p-3 d-flex flex-column justify-content-between">
-                <div class="position-absolute top-0 end-0 p-3 opacity-10">
-                    <i class="bi bi-arrow-up-circle-fill text-success fs-1"></i>
+<div class="row g-3">
+    <!-- Total Balance Card -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card glass-card border-0 h-100 p-3 position-relative overflow-hidden">
+            <div class="card-glow bg-primary"></div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="icon-box bg-primary-subtle text-primary rounded-3">
+                    <i class="bi bi-wallet2 fs-5"></i>
                 </div>
-                <div class="mb-2">
-                    <span
-                        class="badge bg-success-subtle text-success-emphasis rounded-pill px-2 py-1 small fw-normal mb-1">Gelirler</span>
-                </div>
-                <div>
-                    <h6 class="text-secondary small mb-1">Toplam Gelir</h6>
-                    <h3 class="mb-0 fw-bold text-success">{{ budgetService.totalIncome() |
-                        currency:'TRY':'symbol-narrow':'1.0-0' }}</h3>
-                </div>
+                <span class="badge bg-primary-subtle text-primary rounded-pill small fw-bold">PRO</span>
             </div>
-            <!-- Mini Progress bar at bottom -->
-            <div class="progress" style="height: 4px;">
-                <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
-            </div>
+            <p class="text-muted small mb-1 fw-medium text-uppercase letter-spacing-1">{{ ts.t('totalBalance') }}</p>
+            <h3 class="fw-bold mb-0 text-dark">{{ ts.getCurrencySymbol() }}{{ budgetService.totalBalance() |
+                number:'1.0-0' }}</h3>
         </div>
     </div>
 
-    <!-- Expense Card -->
-    <div class="col-md-4">
-        <div class="card h-100 border-0 overflow-hidden position-relative">
-            <div class="card-body p-3 d-flex flex-column justify-content-between">
-                <div class="position-absolute top-0 end-0 p-3 opacity-10">
-                    <i class="bi bi-arrow-down-circle-fill text-danger fs-1"></i>
+    <!-- Monthly Income Card -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card glass-card border-0 h-100 p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="icon-box bg-success-subtle text-success rounded-3">
+                    <i class="bi bi-arrow-down-left-circle fs-5"></i>
                 </div>
-                <div class="mb-2">
-                    <span
-                        class="badge bg-danger-subtle text-danger-emphasis rounded-pill px-2 py-1 small fw-normal mb-1">Giderler</span>
-                </div>
-                <div>
-                    <h6 class="text-secondary small mb-1">Toplam Gider</h6>
-                    <h3 class="mb-0 fw-bold text-danger">{{ budgetService.totalExpense() |
-                        currency:'TRY':'symbol-narrow':'1.0-0' }}</h3>
+                <div class="sparkline d-flex gap-1 align-items-end h-20px">
+                    <div class="bg-success opacity-25 rounded-pill" style="width: 3px; height: 60%;"></div>
+                    <div class="bg-success opacity-50 rounded-pill" style="width: 3px; height: 80%;"></div>
+                    <div class="bg-success rounded-pill" style="width: 3px; height: 100%;"></div>
                 </div>
             </div>
-            <div class="progress" style="height: 4px;">
-                <div class="progress-bar bg-danger" role="progressbar" style="width: 100%"></div>
-            </div>
+            <p class="text-muted small mb-1 fw-medium text-uppercase letter-spacing-1">{{ ts.t('monthlyIncome') }}</p>
+            <h3 class="fw-bold mb-0 text-success">+{{ ts.getCurrencySymbol() }}{{ budgetService.monthlyIncome() |
+                number:'1.0-0' }}</h3>
         </div>
     </div>
 
-    <!-- Balance Card -->
-    <div class="col-md-4">
-        <div class="card h-100 border-0 overflow-hidden position-relative bg-primary-subtle">
-            <div class="card-body p-3 d-flex flex-column justify-content-between">
-                <div class="position-absolute top-0 end-0 p-3 opacity-10">
-                    <i class="bi bi-wallet2 text-primary fs-1"></i>
+    <!-- Monthly Expense Card -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card glass-card border-0 h-100 p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="icon-box bg-danger-subtle text-danger rounded-3">
+                    <i class="bi bi-arrow-up-right-circle fs-5"></i>
                 </div>
-                <div class="mb-2">
-                    <span class="badge bg-primary text-white rounded-pill px-2 py-1 small fw-normal mb-1">Net
-                        Durum</span>
+                <div class="progress-circle" [style.--p]="calculatePercentage()">
+                    <span class="small fw-bold">{{ calculatePercentage() }}%</span>
                 </div>
-                <div>
-                    <h6 class="text-primary-emphasis small mb-1">Mevcut Bakiye</h6>
-                    <h3 class="mb-0 fw-bold text-primary">{{ budgetService.totalBalance() |
-                        currency:'TRY':'symbol-narrow':'1.0-0' }}</h3>
+            </div>
+            <p class="text-muted small mb-1 fw-medium text-uppercase letter-spacing-1">{{ ts.t('monthlyExpense') }}</p>
+            <h3 class="fw-bold mb-0 text-danger">-{{ ts.getCurrencySymbol() }}{{ budgetService.monthlyExpense() |
+                number:'1.0-0' }}</h3>
+        </div>
+    </div>
+
+    <!-- Savings Rate Card (New Visualization) -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card glass-card border-0 h-100 p-3">
+            <div class="d-flex align-items-center justify-content-between mb-3 text-info">
+                <div class="icon-box bg-info-subtle text-info rounded-3">
+                    <i class="bi bi-graph-up-arrow fs-5"></i>
+                </div>
+                <div class="d-flex gap-1 align-items-center bg-info-subtle px-2 py-1 rounded-pill small">
+                    <i class="bi bi-lightning-charge-fill fs-xs"></i>
+                    <span class="fw-bold fs-xs">{{ 100 - calculatePercentage() }}% {{ ts.t('savingsRate') }}</span>
+                </div>
+            </div>
+            <p class="text-muted small mb-1 fw-medium text-uppercase letter-spacing-1">{{ ts.t('savingsRate') }}</p>
+            <div class="d-flex align-items-end gap-2">
+                <h3 class="fw-bold mb-0 text-info">{{ ts.getCurrencySymbol() }}{{ (budgetService.monthlyIncome() -
+                    budgetService.monthlyExpense())
+                    | number:'1.0-0' }}</h3>
+            </div>
+            <div class="progress mt-2" style="height: 6px; background: rgba(0,0,0,0.05); border-radius: 10px;">
+                <div class="progress-bar bg-info rounded-pill" [style.width]="(100 - calculatePercentage()) + '%'">
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Compact Stats Bar -->
-<div class="card border-0 mb-3">
-    <div class="card-body p-3 py-2 d-flex align-items-center justify-content-between small">
-        <span class="text-muted">Oran:</span>
-        <div class="progress flex-grow-1 mx-3" style="height: 8px; border-radius: 4px;">
-            <div class="progress-bar bg-success" role="progressbar" [style.width.%]="calculateIncomePercentage()"></div>
-            <div class="progress-bar bg-danger" role="progressbar" [style.width.%]="calculateExpensePercentage()"></div>
-        </div>
-        <span class="fw-bold">{{ calculatePercentage() }}%</span>
-    </div>
-</div>
-
-<!-- Recent Transactions -->
-<div class="card shadow-sm border-0">
-    <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
-        <h6 class="mb-0 fw-bold text-dark">Son İşlemler</h6>
-        <small class="text-muted cursor-pointer" style="font-size: 0.75rem;">Tümünü Gör</small>
-    </div>
-    <div class="card-body p-0">
-        <div class="list-group list-group-flush">
-            <div *ngFor="let t of budgetService.transactions().slice(0, 5)"
-                class="list-group-item list-group-item-action border-0 px-4 py-3 cursor-pointer d-flex align-items-center justify-content-between"
-                (click)="editState.startEdit(t)">
-
-                <!-- Left: Icon & Info -->
-                <div class="d-flex align-items-center gap-3">
-                    <div class="icon-box rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm"
-                        [ngClass]="'bg-' + getCategoryColor(t.category, t.description)"
-                        style="width: 40px; height: 40px; font-size: 1.1rem;">
-                        <i class="bi" [ngClass]="getCategoryIcon(t.category, t.description)"></i>
-                    </div>
-                    <div class="d-flex flex-column">
-                        <span class="mb-0 fw-bold text-dark small">{{ t.description }}</span>
-                        <span class="text-muted" style="font-size: 0.7rem;">{{ t.date | date:'mediumDate' }}</span>
-                    </div>
+<!-- Distribution Insight -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card glass-card border-0 p-4">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="icon-box bg-warning-subtle text-warning rounded-4">
+                    <i class="bi bi-pie-chart-fill fs-4"></i>
                 </div>
-
-                <!-- Right: Amount -->
-                <span class="fw-bold small" [class.text-success]="t.type === 'income'"
-                    [class.text-danger]="t.type === 'expense'">
-                    {{ t.type === 'income' ? '+' : '-' }} {{ t.amount | currency:'TRY':'symbol-narrow':'1.0-0' }}
-                </span>
+                <div>
+                    <h5 class="fw-bold mb-0">{{ ts.t('dashboard') }} - {{ ts.t('monthlyIncome') }} / {{
+                        ts.t('monthlyExpense') }}</h5>
+                    <small class="text-muted">{{ ts.t('manageFinance') }}</small>
+                </div>
             </div>
 
-            <!-- Empty State -->
-            <div *ngIf="budgetService.transactions().length === 0" class="text-center py-4">
-                <span class="text-muted small">Henüz işlem yok.</span>
+            <div class="d-flex flex-column gap-3">
+                <div class="d-flex justify-content-between align-items-center small mb-1">
+                    <span class="fw-bold">{{ ts.t('income') }} ({{ calculateIncomePercentage() | number:'1.0-0'
+                        }}%)</span>
+                    <span class="fw-bold text-success">+{{ ts.getCurrencySymbol() }}{{ budgetService.monthlyIncome() |
+                        number:'1.0-0' }}</span>
+                </div>
+                <div class="progress rounded-pill bg-light" style="height: 12px;">
+                    <div class="progress-bar bg-success" [style.width]="calculateIncomePercentage() + '%'"></div>
+                    <div class="progress-bar bg-danger" [style.width]="calculateExpensePercentage() + '%'"></div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center small mt-1">
+                    <span class="fw-bold text-danger">{{ ts.t('expense') }} ({{ calculateExpensePercentage() |
+                        number:'1.0-0' }}%)</span>
+                    <span class="fw-bold">-{{ ts.getCurrencySymbol() }}{{ budgetService.monthlyExpense() |
+                        number:'1.0-0' }}</span>
+                </div>
             </div>
         </div>
     </div>

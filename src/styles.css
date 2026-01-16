@@ -13,10 +13,39 @@
     --text-secondary: #64748b;
     --border-color: rgba(226, 232, 240, 0.8);
     --sidebar-bg: rgba(255, 255, 255, 0.9);
+
+    /* Color Utilities */
+    --success-bg: #198754;
+    --danger-bg: #dc3545;
+    --info-bg: #0dcaf0;
+    --warning-bg: #ffc107;
+    --purple-bg: #6f42c1;
+    --pink-bg: #d63384;
+
     --font-family: 'Inter', sans-serif;
     --input-bg: rgba(255, 255, 255, 0.5);
     --card-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-    /* Soft glass shadow */
+}
+
+.bg-primary-gradient {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.opacity-10 {
+    opacity: 0.12;
+}
+
+/* Light mode specific adjustment for background icons */
+body:not([data-theme="dark"]) .opacity-10 {
+    opacity: 0.25;
+    /* Higher visibility for light theme */
 }
 
 [data-theme="dark"] {
@@ -41,6 +70,37 @@
     --glow-primary: 0 0 15px rgba(96, 165, 250, 0.3);
     --glow-success: 0 0 15px rgba(52, 211, 153, 0.3);
     --glow-danger: 0 0 15px rgba(244, 114, 182, 0.3);
+}
+
+/* Global Color Utilities */
+.bg-success {
+    background-color: var(--success-bg) !important;
+    color: white;
+}
+
+.bg-danger {
+    background-color: var(--danger-bg) !important;
+    color: white;
+}
+
+.bg-info {
+    background-color: var(--info-bg) !important;
+    color: white;
+}
+
+.bg-warning {
+    background-color: var(--warning-bg) !important;
+    color: white;
+}
+
+.bg-purple {
+    background-color: var(--purple-bg) !important;
+    color: white;
+}
+
+.bg-pink {
+    background-color: var(--pink-bg) !important;
+    color: white;
 }
 
 /* Glowing text classes */
@@ -272,9 +332,11 @@ h6 {
     /* Center it */
 }
 
-.sidebar.collapsed .d-flex.justify-content-between {
+.sidebar.collapsed .sidebar-header {
+    flex-direction: column !important;
+    gap: 12px;
+    align-items: center !important;
     justify-content: center !important;
-    /* Center the header content */
 }
 
 .sidebar.collapsed .nav-link {
@@ -331,6 +393,24 @@ h6 {
     background-color: var(--input-bg);
     border-radius: 12px;
     padding: 6px;
+}
+
+.avatar-circle {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.user-profile-section {
+    transition: all 0.2s;
+}
+
+.sidebar.collapsed .avatar-circle {
+    margin: 0 auto;
 }
 
 /* Layout Utilities */

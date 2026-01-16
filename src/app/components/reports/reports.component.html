@@ -1,106 +1,290 @@
-<div class="row g-4 justify-content-center fade-in-up">
+<div class="reports-container fade-in-up">
     <!-- Toolbar -->
-    <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
-        <div class="btn-group shadow-sm bg-white rounded-3 p-1" role="group">
-            <button type="button" class="btn btn-sm btn-light border-0 px-3 fw-medium"
-                [class.active-filter]="selectedPeriod() === 'month'" (click)="setPeriod('month')">Bu Ay</button>
-            <button type="button" class="btn btn-sm btn-light border-0 px-3 fw-medium"
-                [class.active-filter]="selectedPeriod() === 'year'" (click)="setPeriod('year')">Bu Yıl</button>
-            <button type="button" class="btn btn-sm btn-light border-0 px-3 fw-medium"
-                [class.active-filter]="selectedPeriod() === 'all'" (click)="setPeriod('all')">Tümü</button>
+    <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-end align-items-center">
+            <div class="btn-group shadow-sm bg-white rounded-4 p-1 glass-card border-0" role="group">
+                <button type="button" class="btn btn-sm px-4 fw-bold rounded-3"
+                    [class.active-filter]="selectedPeriod() === 'month'" (click)="setPeriod('month')">
+                    {{ ts.currentLang() === 'tr' ? 'Son 30 Gün' : 'Last 30 Days' }}
+                </button>
+                <button type="button" class="btn btn-sm px-4 fw-bold rounded-3"
+                    [class.active-filter]="selectedPeriod() === 'year'" (click)="setPeriod('year')">
+                    {{ ts.currentLang() === 'tr' ? 'Son 1 Yıl' : 'Last 1 Year' }}
+                </button>
+                <button type="button" class="btn btn-sm px-4 fw-bold rounded-3"
+                    [class.active-filter]="selectedPeriod() === 'all'" (click)="setPeriod('all')">
+                    {{ ts.currentLang() === 'tr' ? 'Tümü' : 'All' }}
+                </button>
+            </div>
         </div>
+    </div>
 
+    <!-- Summary Statistics -->
+    <div class="row g-3 mb-4" *ngIf="filteredTransactions().length > 0">
+        <div class="col-md-4">
+            <div class="card glass-card h-100 summary-card">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-box bg-success-subtle text-success">
+                            <i class="bi bi-arrow-up-right"></i>
+                        </div>
+                        <div>
+                            <small class="text-secondary d-block fw-medium mb-1">{{ ts.currentLang() === 'tr' ? 'Toplam
+                                Gelir' : 'Total Income' }}</small>
+                            <h4 class="fw-bold text-success mb-0">{{ filteredIncome() |
+                                currency:ts.currentCurrency():'symbol-narrow':'1.0-0' }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card glass-card h-100 summary-card">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-box bg-danger-subtle text-danger">
+                            <i class="bi bi-arrow-down-left"></i>
+                        </div>
+                        <div>
+                            <small class="text-secondary d-block fw-medium mb-1">{{ ts.currentLang() === 'tr' ? 'Toplam
+                                Gider' : 'Total Expense' }}</small>
+                            <h4 class="fw-bold text-danger mb-0">{{ filteredExpense() |
+                                currency:ts.currentCurrency():'symbol-narrow':'1.0-0' }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card glass-card h-100 summary-card">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="icon-box bg-primary text-white shadow-primary">
+                            <i class="bi bi-wallet2"></i>
+                        </div>
+                        <div>
+                            <small class="text-primary d-block fw-medium mb-1">{{ ts.currentLang() === 'tr' ? 'Net
+                                Bakiye' : 'Net Balance' }}</small>
+                            <h4 class="fw-bold text-primary mb-0">{{ filteredBalance() |
+                                currency:ts.currentCurrency():'symbol-narrow':'1.0-0' }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Empty State -->
-    <div class="col-12" *ngIf="filteredTransactions().length === 0">
-        <div class="alert alert-light border-0 shadow-sm text-center py-5">
-            <h5 class="text-muted mb-3">Bu dönem için veri bulunamadı.</h5>
-            <p class="small text-secondary mb-0">Seçili dönemde ({{ selectedPeriod() | titlecase }}) işlem kaydınız yok.
-            </p>
+    <div class="row" *ngIf="filteredTransactions().length === 0">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm py-5 text-center bg-white">
+                <i class="bi bi-bar-chart text-light display-1 mb-3"></i>
+                <h5 class="text-secondary fw-bold">{{ ts.currentLang() === 'tr' ? 'Veri Bulunamadı' : 'No Data Found' }}
+                </h5>
+                <p class="text-muted mb-0">{{ ts.currentLang() === 'tr' ? 'Seçili dönem için görüntülenecek işlem yok.'
+                    : 'No transactions to display for the selected period.' }}</p>
+            </div>
         </div>
     </div>
 
-    <!-- Charts Area -->
-    <ng-container *ngIf="filteredTransactions().length > 0">
-        <!-- Donut Chart -->
-        <div class="col-md-6 col-lg-5">
-            <div
-                class="card h-100 border-0 p-4 text-center d-flex flex-column align-items-center position-relative overflow-hidden card-gradient-border shadow-sm">
-                <div class="position-absolute top-0 start-0 w-100 h-100 bg-primary-subtle opacity-10"
-                    style="z-index: 0;">
+    <!-- Main Content Grid -->
+    <div class="row g-4" *ngIf="filteredTransactions().length > 0">
+        <!-- Visual Analysis (Left) -->
+        <div class="col-lg-6">
+            <div class="card glass-card h-100 overflow-hidden">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h6 class="fw-bold text-dark mb-0">{{ ts.currentLang() === 'tr' ? 'Genel Dağılım' : 'General
+                        Distribution' }}</h6>
+                    <small class="text-secondary opacity-75">{{ ts.currentLang() === 'tr' ? 'Bütçe Sağlık Göstergesi' :
+                        'Budget Health Indicator' }}</small>
                 </div>
-                <div style="z-index: 1; width: 100%;">
-                    <h5 class="fw-bold mb-4 text-gradient">Gelir / Gider Dağılımı</h5>
-
-                    <div class="position-relative mx-auto" style="width: 200px; height: 200px;">
+                <div class="card-body p-4 text-center">
+                    <div class="position-relative mx-auto" style="width: 230px; height: 230px;">
                         <svg viewBox="0 0 36 36" class="circular-chart">
+                            <defs>
+                                <linearGradient id="successGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#20c997;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#198754;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
                             <path class="circle-bg"
                                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                             <path class="circle-income" [attr.stroke-dasharray]="getIncomeDashArray()"
-                                stroke-linecap="round" style="filter: drop-shadow(0 0 4px var(--success-color));"
                                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                         </svg>
-                        <div class="position-absolute top-50 start-50 translate-middle text-center">
-                            <h6 class="text-muted small mb-0 text-uppercase"
-                                style="font-size: 0.65rem; letter-spacing: 1px;">Kazanç Oranı</h6>
-                            <span class="fw-bold fs-3 text-glow-success">%{{ (filteredIncome() / (filteredIncome() +
-                                filteredExpense())) * 100 | number:'1.0-0' }}</span>
+                        <div
+                            class="position-absolute top-50 start-50 translate-middle text-center w-75 chart-center-content">
+                            <span class="chart-status-badge" [ngClass]="getFinancialStatusClass()">
+                                {{ getFinancialStatus() }}
+                            </span>
+                            <h3 class="fw-bold mb-0"
+                                [style.color]="getFinancialStatusClass() === 'status-good' ? '#198754' : '#dc3545'">
+                                %{{ getSavingsRate() }}
+                            </h3>
+                            <small class="text-muted fw-bold d-block" style="font-size: 0.55rem;">{{
+                                ts.t('savingsRate').toUpperCase() }}</small>
+                        </div>
+                    </div>
+                    <div class="mt-4 d-flex justify-content-center gap-4">
+                        <div class="text-center">
+                            <div class="d-flex align-items-center justify-content-center gap-2 mb-1">
+                                <span class="dot rounded-circle"
+                                    style="width:10px; height:10px; background: linear-gradient(135deg, #20c997, #198754);"></span>
+                                <small class="text-muted fw-bold" style="font-size: 0.7rem;">{{
+                                    ts.t('monthlyIncome').toUpperCase() }}</small>
+                            </div>
+                            <span class="fw-bold text-success d-block" style="font-size: 0.9rem;">
+                                {{ filteredIncome() | currency:ts.currentCurrency():'symbol-narrow':'1.0-0' }}
+                            </span>
+                        </div>
+                        <div class="text-center">
+                            <div class="d-flex align-items-center justify-content-center gap-2 mb-1">
+                                <span class="dot rounded-circle"
+                                    style="width:10px; height:10px; background: linear-gradient(135deg, #ff6b6b, #dc3545);"></span>
+                                <small class="text-muted fw-bold" style="font-size: 0.7rem;">{{
+                                    ts.t('monthlyExpense').toUpperCase() }}</small>
+                            </div>
+                            <span class="fw-bold text-danger d-block" style="font-size: 0.9rem;">
+                                {{ filteredExpense() | currency:ts.currentCurrency():'symbol-narrow':'1.0-0' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <hr class="mx-4 opacity-10">
+
+                    <div class="text-center pb-2">
+                        <small class="text-secondary fw-medium" style="font-size: 0.7rem;">{{ ts.currentLang() === 'tr'
+                            ? 'NET BİRİKİM' : 'NET SAVINGS' }}</small>
+                        <h4 class="fw-bold mb-0" [ngClass]="filteredBalance() >= 0 ? 'text-success' : 'text-danger'">
+                            {{ (filteredBalance() >= 0 ? '+' : '') }}{{ filteredBalance() |
+                            currency:ts.currentCurrency():'symbol-narrow':'1.0-0' }}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categorical Breakdown (Right) -->
+        <div class="col-lg-6">
+            <div class="card glass-card h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h6 class="fw-bold text-dark mb-0">{{ ts.currentLang() === 'tr' ? 'Harcama Analizi' : 'Spending
+                        Analysis' }}</h6>
+                    <small class="text-secondary opacity-75">{{ ts.currentLang() === 'tr' ? 'Detaylı kategori dağılımı'
+                        : 'Detailed category distribution' }}</small>
+                </div>
+                <div class="card-body p-4 custom-scrollbar" style="max-height: 400px; overflow-y: auto;">
+                    <div class="category-stats-list">
+                        <div *ngFor="let stat of categoryStats(); let i = index"
+                            class="mb-4 last-child-mb-0 category-stat-item" [style.animation-delay]="(i * 0.1) + 's'">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="icon-circle shadow-sm icon-glow"
+                                        [ngClass]="'bg-' + getCategoryColor(stat.category) + '-subtle text-' + getCategoryColor(stat.category)">
+                                        <i class="bi" [ngClass]="getCategoryIcon(stat.category)"></i>
+                                    </div>
+                                    <span class="fw-bold text-dark small" style="letter-spacing: -0.2px;">{{
+                                        getCategoryName(stat.category) }}</span>
+                                </div>
+                                <div class="text-end">
+                                    <span class="fw-bold text-dark d-block">{{ stat.amount |
+                                        currency:ts.currentCurrency():'symbol-narrow':'1.0-0' }}</span>
+                                    <small class="text-muted opacity-75">%{{ stat.percentage | number:'1.0-0' }}
+                                        {{ ts.currentLang() === 'tr' ? 'Pay' : 'Share' }}</small>
+                                </div>
+                            </div>
+                            <div class="progress premium-progress">
+                                <div class="progress-bar premium-progress-bar"
+                                    [ngClass]="'bg-' + getCategoryColor(stat.category)" role="progressbar"
+                                    [style.width.%]="stat.percentage"></div>
+                            </div>
+                        </div>
+
+                        <!-- No Expense Info -->
+                        <div *ngIf="categoryStats().length === 0" class="text-center py-5">
+                            <i class="bi bi-piggy-bank text-light display-5"></i>
+                            <p class="text-muted small mt-2">{{ ts.currentLang() === 'tr' ? 'Harcama kaydı bulunmuyor.'
+                                : 'No expense records found.' }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Comparative Insights (Bottom) -->
+    <div class="row g-4 mt-2" *ngIf="filteredTransactions().length > 0">
+        <!-- Monthly Savings (Left) -->
+        <div class="col-lg-6">
+            <div class="card glass-card h-100 overflow-hidden">
+                <div class="card-header bg-transparent border-0 pt-3 px-4">
+                    <h6 class="fw-bold text-dark mb-0">{{ ts.currentLang() === 'tr' ? 'Aylık Birikim' : 'Monthly
+                        Savings' }}</h6>
+                    <small class="text-secondary opacity-75" style="font-size: 0.7rem;">{{ ts.currentLang() === 'tr' ?
+                        'Son 6 Ayın Tasarruf Özeti' : 'Last 6 Months Savings Summary' }}</small>
+                </div>
+                <div class="card-body p-4 pt-2">
+                    <div class="d-flex align-items-end justify-content-between gap-2" style="height: 120px;">
+                        <div *ngFor="let h of monthlyHistory(); let i = index"
+                            class="flex-grow-1 d-flex flex-column justify-content-end align-items-stretch category-stat-item h-100"
+                            [style.animation-delay]="(i * 0.1) + 's'">
+                            <div class="saving-bar" [style.height]="getChartHeight(h.savings)"
+                                [ngClass]="h.savings >= 0 ? 'bg-success' : 'bg-danger'"
+                                style="opacity: 0.85; transition: all 0.5s ease;"
+                                [title]="h.month + ': ' + (h.savings | currency:ts.currentCurrency():'symbol-narrow':'1.0-0')">
+                            </div>
+                            <div class="text-center mt-2">
+                                <small class="text-muted fw-bold d-block"
+                                    style="font-size: 0.6rem; letter-spacing: -0.2px;">{{ h.month }}</small>
+                                <small class="fw-bold d-block"
+                                    [ngClass]="h.savings >= 0 ? 'text-success' : 'text-danger'"
+                                    style="font-size: 0.55rem;">
+                                    {{ (h.savings >= 0 ? '+' : '') }}{{ h.savings |
+                                    currency:ts.currentCurrency():'symbol-narrow':'1.0-0' }}
+                                </small>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Bar Stats -->
-        <div class="col-md-6 col-lg-5">
-            <div class="d-flex flex-column gap-3 h-100">
-                <!-- Income Stat -->
-                <div class="card border-0 p-3 card-gradient-border shadow-sm"
-                    style="--primary-color: var(--success-color)">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-muted small mb-1">Dönem Geliri</h6>
-                            <h4 class="mb-0 fw-bold text-success text-glow-success">{{ filteredIncome() |
-                                currency:'TRY':'symbol-narrow':'1.0-0' }}</h4>
-                        </div>
-                        <div class="progress" style="width: 80px; height: 6px;">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
-                        </div>
-                    </div>
+        <!-- Spending Trend (Right) -->
+        <div class="col-lg-6">
+            <div class="card glass-card h-100 overflow-hidden">
+                <div class="card-header bg-transparent border-0 pt-3 px-4">
+                    <h6 class="fw-bold text-dark mb-0">{{ ts.currentLang() === 'tr' ? 'Harcama Trendi' : 'Spending
+                        Trend' }}</h6>
+                    <small class="text-secondary opacity-75" style="font-size: 0.7rem;">{{ ts.currentLang() === 'tr' ?
+                        'Aylık Gider Eğilimi' : 'Monthly Expense Trend' }}</small>
                 </div>
-
-                <!-- Expense Stat -->
-                <div class="card border-0 p-3 card-gradient-border shadow-sm"
-                    style="--primary-color: var(--danger-color)">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="text-muted small mb-1">Dönem Gideri</h6>
-                            <h4 class="mb-0 fw-bold text-danger text-glow-danger">{{ filteredExpense() |
-                                currency:'TRY':'symbol-narrow':'1.0-0' }}</h4>
-                        </div>
-                        <div class="progress" style="width: 80px; height: 6px;">
-                            <div class="progress-bar bg-danger" role="progressbar"
-                                [style.width.%]="(filteredExpense() / (filteredIncome() + 0.1)) * 100"></div>
+                <div class="card-body p-4 pt-2">
+                    <div class="position-relative" style="height: 100px;">
+                        <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="width: 100%; height: 100%;"
+                            class="fade-in">
+                            <defs>
+                                <linearGradient id="trendGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#dc3545;stop-opacity:0.25" />
+                                    <stop offset="100%" style="stop-color:#dc3545;stop-opacity:0" />
+                                </linearGradient>
+                            </defs>
+                            <path [attr.d]="'M ' + getTrendPoints() + ' L 100,100 L 0,100 Z'" fill="url(#trendGradient)"
+                                class="trend-area-fill" />
+                            <path [attr.d]="'M ' + getTrendPoints()" fill="none" stroke="#dc3545" stroke-width="3"
+                                stroke-linecap="round" stroke-linejoin="round" class="trend-line-path" />
+                        </svg>
+                        <div class="d-flex justify-content-between mt-2">
+                            <div *ngFor="let h of monthlyHistory()" class="text-center" style="width: 16.6%;">
+                                <small class="text-muted fw-bold d-block"
+                                    style="font-size: 0.6rem; letter-spacing: -0.2px;">{{ h.month }}</small>
+                                <small class="fw-bold d-block text-danger" style="font-size: 0.55rem;">
+                                    {{ h.expense | currency:ts.currentCurrency():'symbol-narrow':'1.0-0' }}
+                                </small>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Balance Stat -->
-                <div
-                    class="card border-0 p-3 flex-grow-1 d-flex flex-column justify-content-center bg-primary-subtle shadow-sm">
-                    <h6 class="text-primary fw-bold mb-2">Net Kalan</h6>
-                    <div class="d-flex align-items-baseline gap-2">
-                        <h2 class="mb-0 fw-bold text-primary display-6">{{ filteredBalance() |
-                            currency:'TRY':'symbol-narrow':'1.0-0' }}</h2>
-                        <span class="badge bg-primary text-white rounded-pill"
-                            *ngIf="filteredBalance() > 0">+Pozitif</span>
-                        <span class="badge bg-danger text-white rounded-pill"
-                            *ngIf="filteredBalance() < 0">-Negatif</span>
-                    </div>
-                    <p class="small text-muted mb-0 mt-2">Bu dönem için net nakit akışınız.</p>
                 </div>
             </div>
         </div>
-    </ng-container>
+    </div>
 </div>

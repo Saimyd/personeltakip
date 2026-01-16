@@ -1,6 +1,8 @@
 import { Component, effect, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LayoutService, ActiveView } from '../../services/layout.service';
+import { ProfileService } from '../../services/profile.service';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
     selector: 'app-sidebar',
@@ -11,6 +13,8 @@ import { LayoutService, ActiveView } from '../../services/layout.service';
 })
 export class SidebarComponent {
     layoutService = inject(LayoutService);
+    profileService = inject(ProfileService);
+    ts = inject(TranslationService);
     isDarkMode = signal<boolean>(false);
     isExpanded = signal<boolean>(true);
 

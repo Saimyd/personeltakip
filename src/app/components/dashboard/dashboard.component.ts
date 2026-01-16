@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BudgetService } from '../../services/budget.service';
 import { EditStateService } from '../../services/edit-state.service';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -12,24 +13,24 @@ import { EditStateService } from '../../services/edit-state.service';
 })
 export class DashboardComponent {
     budgetService = inject(BudgetService);
-
     editState = inject(EditStateService); // For clicking transactions
+    ts = inject(TranslationService);
 
     calculateIncomePercentage(): number {
-        const total = this.budgetService.totalIncome() + this.budgetService.totalExpense();
-        if (total === 0) return 50; // default for visual balance
-        return (this.budgetService.totalIncome() / total) * 100;
+        const total = this.budgetService.monthlyIncome() + this.budgetService.monthlyExpense();
+        if (total === 0) return 50;
+        return (this.budgetService.monthlyIncome() / total) * 100;
     }
 
     calculateExpensePercentage(): number {
-        const total = this.budgetService.totalIncome() + this.budgetService.totalExpense();
+        const total = this.budgetService.monthlyIncome() + this.budgetService.monthlyExpense();
         if (total === 0) return 0;
-        return (this.budgetService.totalExpense() / total) * 100;
+        return (this.budgetService.monthlyExpense() / total) * 100;
     }
 
     calculatePercentage(): number {
-        const income = this.budgetService.totalIncome();
-        const expense = this.budgetService.totalExpense();
+        const income = this.budgetService.monthlyIncome();
+        const expense = this.budgetService.monthlyExpense();
         if (income === 0) return 0;
         return Math.round((expense / income) * 100);
     }
@@ -51,6 +52,9 @@ export class DashboardComponent {
             'education': 'bi-book',
             'tech': 'bi-phone',
             'gift': 'bi-gift',
+            'hobby': 'bi-bicycle',
+            'beauty': 'bi-scissors',
+            'debt': 'bi-bank',
             'other': 'bi-circle'
         };
 
@@ -67,6 +71,9 @@ export class DashboardComponent {
         if (desc.includes('benzin') || desc.includes('taksi') || desc.includes('ulaşım')) return 'bi-fuel-pump';
         if (desc.includes('kahve') || desc.includes('restoran')) return 'bi-cup-hot';
         if (desc.includes('telefon') || desc.includes('internet')) return 'bi-router';
+        if (desc.includes('spor') || desc.includes('hobi')) return 'bi-bicycle';
+        if (desc.includes('bakım') || desc.includes('kuaför')) return 'bi-scissors';
+        if (desc.includes('kredi') || desc.includes('borç')) return 'bi-bank';
 
         // 3. Default
         return 'bi-receipt';
@@ -87,6 +94,9 @@ export class DashboardComponent {
             'education': 'info',
             'tech': 'dark',
             'gift': 'danger',
+            'hobby': 'primary',
+            'beauty': 'pink',
+            'debt': 'dark',
             'other': 'secondary'
         };
 
@@ -100,6 +110,9 @@ export class DashboardComponent {
         if (desc.includes('kira')) return 'warning';
         if (desc.includes('market')) return 'danger';
         if (desc.includes('fatura')) return 'warning';
+        if (desc.includes('spor')) return 'primary';
+        if (desc.includes('bakım')) return 'pink';
+        if (desc.includes('kredi')) return 'dark';
 
         return 'secondary';
     }

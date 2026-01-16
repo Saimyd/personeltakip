@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 
-export type ActiveView = 'dashboard' | 'transactions' | 'reports';
+export type ActiveView = 'dashboard' | 'transactions' | 'reports' | 'profile' | 'settings';
 
 @Injectable({
     providedIn: 'root'

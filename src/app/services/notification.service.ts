@@ -34,6 +34,14 @@ export class NotificationService {
         this.show(message, 'error', 5000);
     }
 
+    info(message: string) {
+        this.show(message, 'info');
+    }
+
+    warning(message: string) {
+        this.show(message, 'info'); // Simplified, using info style for warning for now
+    }
+
     remove(id: string) {
         this.toasts.update(current => current.filter(t => t.id !== id));
     }
